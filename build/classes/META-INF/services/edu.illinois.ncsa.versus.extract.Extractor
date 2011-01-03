@@ -1,0 +1,5 @@
+edu.illinois.ncsa.versus.extract.impl.ArrayFeatureExtractor
+edu.illinois.ncsa.versus.extract.impl.ColorAverageVectorFeatureExtractor
+edu.illinois.ncsa.versus.extract.impl.RGBHistogramExtractor
+edu.illinois.ncsa.versus.extract.impl.SignatureVectorExtraction
+
