@@ -17,7 +17,7 @@ public class ImageObjectAdapterTest {
 		ImageObjectAdapter adapter = new ImageObjectAdapter();
 
 		try {
-			adapter.load(new File("data/Tulips2.jpg"));
+			adapter.load(new File("data/test_2.jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("Faild loading file");
@@ -35,7 +35,7 @@ public class ImageObjectAdapterTest {
 
 		ImageObjectAdapter adapter = new ImageObjectAdapter();
 
-		File file = new File("data/Tulips.jpg");
+		File file = new File("data/test_1.jpg");
 		
 		System.out.print("Absolute path: " + file.getAbsolutePath());
 		
