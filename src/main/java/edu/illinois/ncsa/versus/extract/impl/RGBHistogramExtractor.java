@@ -9,6 +9,7 @@ import java.util.Set;
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.Adapter;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
+import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
@@ -34,8 +35,8 @@ public class RGBHistogramExtractor implements Extractor {
 
 	@Override
 	public Descriptor extract(Adapter adapter) throws Exception {
-		if (adapter instanceof HasPixels) {
-			HasPixels hasPixels = (HasPixels) adapter;
+		if (adapter instanceof HasRGBPixels) {
+			HasRGBPixels hasPixels = (HasRGBPixels) adapter;
 			double[][][] pixels = hasPixels.getRGBPixels();
 			RGBHistogramDescriptor histogram = new RGBHistogramDescriptor();
 
