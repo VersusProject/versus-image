@@ -30,7 +30,7 @@ public class RGBHistogramExtractor implements Extractor {
 
 	@Override
 	public String getName() {
-		return "Pixels to Histogram";
+		return "Pixels to RGB Histogram";
 	}
 
 	@Override
