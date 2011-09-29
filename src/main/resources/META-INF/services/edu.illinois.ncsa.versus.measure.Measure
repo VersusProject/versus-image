@@ -1,4 +1,5 @@
 edu.illinois.ncsa.versus.measure.impl.ChiSquaredMeasure
+edu.illinois.ncsa.versus.measure.impl.JeffreyDivergenceMeasure
 edu.illinois.ncsa.versus.measure.impl.KLdivergenceMeasure
 edu.illinois.ncsa.versus.measure.impl.HistogramDistanceMeasure
 edu.illinois.ncsa.versus.measure.impl.NormalizedCrossCorrelationMeasure
