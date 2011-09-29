@@ -10,14 +10,14 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 
 /**
- * Kullback-Leibler Divergence of two features.
+ * Chi-Squared distance (Neyman's)
  * 
  * @author Devin Bonnie
  */
-public class KLdivergenceMeasure implements Measure {
+public class ChiSquaredMeasure implements Measure {
 	
 	/**
-	 * Compares two RGB Histograms using the KL divergence i.e., d_KL( A, B )
+	 * Compares two DoubleArrayFeatures using the Chi-Squared metric, i.e., X^2( A, B )
 	 * 
 	 * @param feature1 A: DoubleArray
 	 * @param feature2 B: DoubleArray
@@ -30,10 +30,9 @@ public class KLdivergenceMeasure implements Measure {
 		if( feature1.getNumBins() != feature2.getNumBins() ) {
 			
 			throw new Exception("Features must have the same length");
-			//return null?
 		}
 			
-		double dist = 0;
+		double X2 = 0;
 		
 		for( int i=0; i < feature1.getNumBins(); i++ ){
 			
@@ -41,17 +40,20 @@ public class KLdivergenceMeasure implements Measure {
 				
 				for( int k=0; k < feature1.getNumBins(); k++ ){
 					
-					//ignore zero bins
-					if( (feature1.get(i,j,k) != 0.0) && (feature2.get(i,j,k) != 0.0) ){
-						dist += (double)feature1.get(i,j,k) * Math.log( (double)feature1.get(i,j,k) / (double)feature2.get(i,j,k) );
+					double Mi = ( feature1.get(i,j,k) + feature2.get(i,j,k) ) / 2.0;
+					
+					//Neyman's Chi-Squared ignores zero bins
+					if( Mi != 0 ){
+						X2 +=  Math.pow( feature1.get(i,j,k) - Mi, 2 ) / Mi;
 					}
+					
 				}
-			}	
+			}
 		}		
 		
-		return new SimilarityNumber(dist);
+		return new SimilarityNumber(X2);
 	}
-	
+		
 	@Override
 	public Similarity compare(Descriptor feature1, Descriptor feature2)	throws Exception {
 		
@@ -60,30 +62,28 @@ public class KLdivergenceMeasure implements Measure {
 			return compare( (RGBHistogramDescriptor) feature1, (RGBHistogramDescriptor) feature2 );
 		}
 		else {
-			throw new UnsupportedTypeException("Expects a histogram");
+			throw new UnsupportedTypeException("Expecting some type of histogram feature");
 		}
 	}
 	
 	@Override
 	public String getFeatureType() {
 		return RGBHistogramDescriptor.class.getName();
-	}
-	
+	}	
 	
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
-		// TODO Auto-generated method stub		
-		//simply divide by the lenth of 'numBins' in the histogram to normalize the KL divergence...
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public String getName() {
-		return "Kullback-Leibler Divergence";
+		return "Chi-Squared (Neyman's) Measure";
 	}
 	
 	@Override
-	public Class<KLdivergenceMeasure> getType() {
-		return KLdivergenceMeasure.class;
+	public Class<ChiSquaredMeasure> getType() {
+		return ChiSquaredMeasure.class;
 	}
 }
