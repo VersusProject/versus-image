@@ -19,8 +19,8 @@ public class KLdivergenceMeasure implements Measure {
 	/**
 	 * Compares two RGB Histograms using the KL divergence i.e., d_KL( A, B )
 	 * 
-	 * @param feature1 A: DoubleArray
-	 * @param feature2 B: DoubleArray
+	 * @param feature1 A: RGBHistogramDescriptor
+	 * @param feature2 B: RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
