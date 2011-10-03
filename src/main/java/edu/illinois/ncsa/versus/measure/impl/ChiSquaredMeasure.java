@@ -19,8 +19,8 @@ public class ChiSquaredMeasure implements Measure {
 	/**
 	 * Compares two DoubleArrayFeatures using the Chi-Squared metric, i.e., X^2( A, B )
 	 * 
-	 * @param feature1 A: DoubleArray
-	 * @param feature2 B: DoubleArray
+	 * @param feature1 A: RGBHistogramDescriptor
+	 * @param feature2 B: RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
