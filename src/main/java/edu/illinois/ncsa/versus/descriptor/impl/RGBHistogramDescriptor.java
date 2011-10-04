@@ -3,35 +3,34 @@
  */
 package edu.illinois.ncsa.versus.descriptor.impl;
 
+//import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.descriptor.Feature;
 
 /**
- * Binned color histogram.
+ * Binned grayscale histogram.
  * 
- * @author Luigi Marini
+ * @author Devin Bonnie
  * 
  */
 public class RGBHistogramDescriptor implements Feature {
 
-	private final int numBins;
-
-	private final int[][][] histogram;
+	private final int[][] rgbHistogram;	
+	private final int[][] normalizedRGBHistogram;
 
 	public RGBHistogramDescriptor() {
-		this(16);
+		this(256);
 	}
 
 	public RGBHistogramDescriptor(int numBins) {
-		this.numBins = numBins;
-		this.histogram = new int[numBins][numBins][numBins];
+		this.rgbHistogram           = new int[numBins][3];
+		this.normalizedRGBHistogram = computeNormalizedHistogram(rgbHistogram);
 	}
 
-	public void add(int r, int g, int b) {
-		int intervalSize = 256 / numBins;
-		int x = r / intervalSize;
-		int y = g / intervalSize;
-		int z = b / intervalSize;
-		histogram[x][y][z]++;
+	public void add(int val, String color) throws Exception {
+		
+		int band = colorInputTest( color );	
+		
+		rgbHistogram[val][band]++;
 	}
 
 	@Override
@@ -43,31 +42,109 @@ public class RGBHistogramDescriptor implements Feature {
 	 * @return the numBins
 	 */
 	public int getNumBins() {
-		return numBins;
+		return rgbHistogram.length;
 	}
 
+	/**
+	 * Normalize the input RGB histogram.
+	 * 
+	 * @param hist
+	 *     Un-normalized histogram (RGB)
+	 * @return
+	 *     Normalized histogram (RGB)
+	 */   
+	public int[][] computeNormalizedHistogram( int[][] hist ){
+		
+		int[][] cdf = new int[hist.length][3];
+		
+		for( int j=0; j < 3; j++ ){
+			
+			int min, numPixels;			
+			
+			//construct the red cdf
+			cdf[0][j] = hist[0][j];
+			min       =  cdf[0][j];
+			numPixels = hist[0][j];
+			
+			for( int i=1; i < hist.length; i++ ){
+				
+				cdf[i][j]  = hist[i][j]+cdf[i-1][j];
+				numPixels += hist[i][j];
+				
+				if( min > cdf[i][j] ){
+					min = cdf[i][j];
+				}			
+			}
+					
+			//normalize the histogram
+			for( int i=0; i < cdf.length; i++ ){
+			
+				cdf[i][0] = Math.round( (float)( ((cdf[i][0]-min)/(numPixels-min))*255 ) );
+			}
+		
+		}
+		
+		return cdf;
+	}
+	
 	@Override
 	public String getName() {
-		return "Normalized Histogram";
+		return "RGB Histogram";
 	}
 
 	@Override
 	public String toString() {
+		
 		String s = "Showing contents of " + getName() + "\n";
-		for (int x = 0; x < numBins; x++) {
-			for (int y = 0; y < numBins; y++) {
-				for (int z = 0; z < numBins; z++) {
-					if (histogram[x][y][z] != 0) {
-						s += ("[" + x + ", " + y + ", " + z + "] = "
-								+ histogram[x][y][z] + "\n");
-					}
+			
+		for (int i = 0; i < 3; i++) {
+				
+			for (int x = 0; x < rgbHistogram.length; x++) {
+				
+				if (rgbHistogram[x][i] != 0) {
+					s += ("[" + x + ", " + i + "] = "
+							+ rgbHistogram[x][i] + "\n");
 				}
 			}
 		}
+		
 		return s;
+	
 	}
 
-	public int get(int x, int y, int z) {
-		return histogram[x][y][z];
+	public int get(int x, String color) throws Exception {
+		
+		int band = colorInputTest( color );	
+		
+		return rgbHistogram[x][band];
+	}
+	
+	public int getNormalized(int x, String color) throws Exception {
+		
+		int band = colorInputTest( color );
+				
+		return normalizedRGBHistogram[x][band];
+	}
+	
+	
+	private int colorInputTest( String color ) throws Exception {
+		
+		int band;
+		
+		if( color.equals("red") ){
+			band = 0;
+		}
+		else if( color.equals("blue") ){
+			band = 1;
+		}
+		else if( color.equals("green") ){
+			band = 2;
+		}
+		else{
+			throw new Exception("Invalid color choice. Valid choices are red, green, or blue.");
+		}
+		
+		return band;
 	}
 }
+
