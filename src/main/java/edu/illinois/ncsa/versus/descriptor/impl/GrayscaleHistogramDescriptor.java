@@ -14,7 +14,7 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 public class GrayscaleHistogramDescriptor implements Feature {
 
 	private final int[] histogram;	
-	private final int[] normalizedHistogram;
+	private int[] normalizedHistogram;
 
 	public GrayscaleHistogramDescriptor() {
 		this(256);
@@ -22,7 +22,7 @@ public class GrayscaleHistogramDescriptor implements Feature {
 
 	public GrayscaleHistogramDescriptor(int numBins) {
 		this.histogram           = new int[numBins];
-		this.normalizedHistogram = computeNormalizedHistogram(histogram);
+		this.normalizedHistogram = new int[numBins];
 	}
 
 	public void add(int val) {
@@ -49,20 +49,20 @@ public class GrayscaleHistogramDescriptor implements Feature {
 	 * @return
 	 *     Normalized histogram (grayscale)
 	 */   
-	public int[] computeNormalizedHistogram( int[] hist ){
+	public int[] computeNormalizedHistogram( ){
 		
 		int min, numPixels;
-		int[] cdf = new int[hist.length];
+		int[] cdf = new int[histogram.length];
 		
 		//construct the cdf
-		cdf[0]    = hist[0];
+		cdf[0]    = histogram[0];
 		min       =  cdf[0];
-		numPixels = hist[0];
+		numPixels = histogram[0];
 		
-		for( int i=1; i<hist.length; i++ ){
+		for( int i=1; i < histogram.length; i++ ){
 			
-			cdf[i]     = hist[i]+cdf[i-1];
-			numPixels += hist[i];
+			cdf[i]     = histogram[i]+cdf[i-1];
+			numPixels += histogram[i];
 			
 			if( min > cdf[i] ){
 				min = cdf[i];
@@ -70,9 +70,9 @@ public class GrayscaleHistogramDescriptor implements Feature {
 		}
 				
 		//normalize the histogram
-		for( int i=0; i<cdf.length; i++ ){
+		for( int i=0; i < cdf.length; i++ ){
 		
-			cdf[i] = Math.round( (float)( ((cdf[i]-min)/(numPixels-min))*255 ) );
+			cdf[i] = Math.round( (float)( ((float)(cdf[i]-min)/(float)(numPixels-min))*255 ) );
 		}
 		
 		return cdf;

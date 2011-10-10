@@ -5,16 +5,18 @@ package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.PixelHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
 import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 /**
- * Euclidean distance between two color histograms.
+ * Euclidean distance between two pixel histograms.
  * 
- * @author Luigi Marini
+ * @author Luigi Marini, Devin Bonnie
  * 
  */
 public class HistogramDistanceMeasure implements Measure {
@@ -25,8 +27,16 @@ public class HistogramDistanceMeasure implements Measure {
 		return null;
 	}
 
-	public SimilarityNumber compare(RGBHistogramDescriptor feature1,
-			RGBHistogramDescriptor feature2) throws Exception {
+	/**
+	 * Compares two Pixel Histograms by Euclidean Distance.
+	 * 
+	 * @param feature1: PixelHistogramDescriptor
+	 * @param feature2: PixelHistogramDescriptor
+	 * @return SimilarityNumber
+	 * @throws Exception
+	 */
+	public SimilarityNumber compare(PixelHistogramDescriptor feature1,
+			PixelHistogramDescriptor feature2) throws Exception {
 
 		double sum = 0;
 		
@@ -40,27 +50,80 @@ public class HistogramDistanceMeasure implements Measure {
 
 		return new SimilarityNumber(sum);
 	}
+	
+	/**
+	 * Compares two RGB Histograms by Euclidean Distance.
+	 * 
+	 * @param feature1: RGBHistogramDescriptor
+	 * @param feature2: RGBHistogramDescriptor
+	 * @return SimilarityNumber
+	 * @throws Exception
+	 */
+	public SimilarityNumber compare(RGBHistogramDescriptor feature1, RGBHistogramDescriptor feature2) throws Exception {
 
+		double sum = 0;
+		
+		for (int x=0; x<feature1.getNumBands(); x++) {
+			for (int y=0; y<feature1.getNumBins(); y++) {			
+					
+				sum += Math.pow(feature1.get(y, x) - feature2.get(y, x), 2);
+			}	
+		}	
+		return new SimilarityNumber(sum);
+	}
+	
+	/**
+	 * Compares two Grayscale Histograms by Euclidean Distance.
+	 * 
+	 * @param feature1: GrayscaleHistogramDescriptor
+	 * @param feature2: GrayscaleHistogramDescriptor
+	 * @return SimilarityNumber
+	 * @throws Exception
+	 */
+	public SimilarityNumber compare(GrayscaleHistogramDescriptor feature1, GrayscaleHistogramDescriptor feature2) throws Exception {
+
+		double sum = 0;
+		
+		for (int x=0; x<feature1.getNumBins(); x++) {
+				
+			sum += Math.pow(feature1.get(x) - feature2.get(x), 2);
+		}	
+		return new SimilarityNumber(sum);
+	}
+	
 	@Override
 	public String getFeatureType() {
-		return RGBHistogramDescriptor.class.getName();
+		return PixelHistogramDescriptor.class.getName();
 	}
 
 	@Override
 	public String getName() {
-		return "Histogram Distance";
+		return "Histogram Euclidean Distance";
 	}
 
 	@Override
 	public Similarity compare(Descriptor feature1, Descriptor feature2)
 			throws Exception {
 
-		if (feature1 instanceof RGBHistogramDescriptor
-				&& feature2 instanceof RGBHistogramDescriptor) {
+		if (feature1 instanceof PixelHistogramDescriptor
+				&& feature2 instanceof PixelHistogramDescriptor) {
+			PixelHistogramDescriptor histogramFeature1 = (PixelHistogramDescriptor) feature1;
+			PixelHistogramDescriptor histogramFeature2 = (PixelHistogramDescriptor) feature2;
+			return compare(histogramFeature1, histogramFeature2);
+		} 
+		else if (feature1 instanceof RGBHistogramDescriptor && feature2 instanceof RGBHistogramDescriptor) {
+			
 			RGBHistogramDescriptor histogramFeature1 = (RGBHistogramDescriptor) feature1;
 			RGBHistogramDescriptor histogramFeature2 = (RGBHistogramDescriptor) feature2;
 			return compare(histogramFeature1, histogramFeature2);
-		} else {
+		} 
+		else if( feature1 instanceof GrayscaleHistogramDescriptor && feature2 instanceof GrayscaleHistogramDescriptor) {
+			
+			GrayscaleHistogramDescriptor histogramFeature1 = (GrayscaleHistogramDescriptor) feature1;
+			GrayscaleHistogramDescriptor histogramFeature2 = (GrayscaleHistogramDescriptor) feature2;
+			return compare(histogramFeature1, histogramFeature2);
+		}
+		else {
 			throw new UnsupportedTypeException(
 					"Similarity measure expects feature of type HistogramFeature");
 		}
