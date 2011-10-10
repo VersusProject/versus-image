@@ -56,7 +56,7 @@ public class BhattacharyyaDistanceMeasure implements Measure {
 			}	
 		}
 
-		return new SimilarityNumber( Math.sqrt( 1-sum ) );
+		return new SimilarityNumber( sum  );
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class BhattacharyyaDistanceMeasure implements Measure {
 			sum += Math.sqrt( (double)normHist1[i] * (double)normHist2[i] );				
 		}
 
-		return new SimilarityNumber( Math.sqrt( 1-sum ) );
+		return new SimilarityNumber( sum  );
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class BhattacharyyaDistanceMeasure implements Measure {
 			}	
 		}
 
-		return new SimilarityNumber( Math.sqrt( 1-sum ) );
+		return new SimilarityNumber( sum  );
 	}
 	
 	@Override
