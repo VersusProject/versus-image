@@ -7,8 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import edu.illinois.ncsa.versus.adapter.impl.ImageObjectAdapter;
-import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
-import edu.illinois.ncsa.versus.extract.impl.RGBHistogramExtractor;
+import edu.illinois.ncsa.versus.descriptor.impl.PixelHistogramDescriptor;
+import edu.illinois.ncsa.versus.extract.impl.PixelHistogramExtractor;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 
 public class HistogramDistanceMeasureTest {
@@ -20,11 +20,11 @@ public class HistogramDistanceMeasureTest {
 		try {
 			adapter.load(new File("data/test_4.jpg"));
 			adapter2.load(new File("data/test_4.jpg"));
-			RGBHistogramExtractor extractor = new RGBHistogramExtractor();
-			RGBHistogramExtractor extractor2 = new RGBHistogramExtractor();
-			RGBHistogramDescriptor descriptor = (RGBHistogramDescriptor) extractor
+			PixelHistogramExtractor extractor = new PixelHistogramExtractor();
+			PixelHistogramExtractor extractor2 = new PixelHistogramExtractor();
+			PixelHistogramDescriptor descriptor = (PixelHistogramDescriptor) extractor
 					.extract(adapter);
-			RGBHistogramDescriptor descriptor2 = (RGBHistogramDescriptor) extractor2
+			PixelHistogramDescriptor descriptor2 = (PixelHistogramDescriptor) extractor2
 					.extract(adapter2);
 
 			HistogramDistanceMeasure measure = new HistogramDistanceMeasure();

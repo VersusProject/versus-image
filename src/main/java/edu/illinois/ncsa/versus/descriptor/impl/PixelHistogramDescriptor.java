@@ -6,9 +6,9 @@ package edu.illinois.ncsa.versus.descriptor.impl;
 import edu.illinois.ncsa.versus.descriptor.Feature;
 
 /**
- * Binned color histogram.
+ * Binned pixel histogram.
  * 
- * @author Luigi Marini
+ * @author Luigi Marini, Devin Bonnie
  * 
  */
 public class PixelHistogramDescriptor implements Feature {
@@ -52,25 +52,7 @@ public class PixelHistogramDescriptor implements Feature {
 		return numBins;
 	}
 
-	/**
-	 * Normalize the input RGB histogram.
-	 * 
-	 * @param h
-	 *     Un-normalized histogram (RGB)
-	 * @return
-	 *     Normalized histogram (RGB)
-	 */    
-//	public int[][][] getNormalizedHistogram( int[][][] h ){
-//		
-//		int[][][] nH = new int[256][256][256];
-//		
-//		int minR = 0;
-//		int minG = 0;
-//		int minB = 0;
-//		
-//		return nH;
-//	}
-	
+
 	@Override
 	public String getName() {
 		return "Pixel Histogram";

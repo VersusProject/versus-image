@@ -12,7 +12,7 @@ import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
-import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
@@ -22,7 +22,7 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  * 
  * 
  */
-public class RGBHistogramExtractor implements Extractor {
+public class GrayscaleHistogramExtractor implements Extractor {
 
 	@Override
 	public BufferedImageAdapter newAdapter() {
@@ -31,7 +31,7 @@ public class RGBHistogramExtractor implements Extractor {
 
 	@Override
 	public String getName() {
-		return "Pixels to RGB Histogram";
+		return "Pixels to Grayscale Histogram";
 	}
 
 	@Override
@@ -43,26 +43,24 @@ public class RGBHistogramExtractor implements Extractor {
 			
 			double[][][] pixels = hasPixels.getRGBPixels();
 			
-			RGBHistogramDescriptor histogram_rgb = new RGBHistogramDescriptor();
+			GrayscaleHistogramDescriptor histogram = new GrayscaleHistogramDescriptor();
 
 			for (int x = 0; x < pixels.length; x++) {
 				for (int y = 0; y < pixels[0].length; y++) {
 					
-					int r, g, b;
-					if (pixels[x][y].length == 3) {
+					int r;
+					if (pixels[x][y].length == 1) {
 						r = (int) pixels[x][y][0];
-						g = (int) pixels[x][y][1];
-						b = (int) pixels[x][y][2];
-						histogram_rgb.add(r, "red");
-						histogram_rgb.add(g, "green");
-						histogram_rgb.add(b, "blue");
+						histogram.add(r);
+
 					}
+					//TODO: else throw exception
 					else{
-						throw new UnsupportedTypeException("Expected a color image. Input image is grayscale.");
+						throw new UnsupportedTypeException("Expected a grayscale image. Input image is otherwise.");
 					}
 				}
 			}
-			return histogram_rgb;
+			return histogram;
 		} 
 		else {
 			throw new UnsupportedTypeException();
@@ -78,6 +76,6 @@ public class RGBHistogramExtractor implements Extractor {
 
 	@Override
 	public Class<? extends Descriptor> getFeatureType() {
-		return RGBHistogramDescriptor.class;
+		return GrayscaleHistogramDescriptor.class;
 	}
 }

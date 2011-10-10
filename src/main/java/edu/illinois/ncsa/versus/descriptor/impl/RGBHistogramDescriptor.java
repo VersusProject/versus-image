@@ -7,7 +7,7 @@ package edu.illinois.ncsa.versus.descriptor.impl;
 import edu.illinois.ncsa.versus.descriptor.Feature;
 
 /**
- * Binned grayscale histogram.
+ * Binned RGB histogram.
  * 
  * @author Devin Bonnie
  * 
@@ -15,7 +15,7 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 public class RGBHistogramDescriptor implements Feature {
 
 	private final int[][] rgbHistogram;	
-	private final int[][] normalizedRGBHistogram;
+	private int[][] normalizedRGBHistogram;
 
 	public RGBHistogramDescriptor() {
 		this(256);
@@ -23,13 +23,12 @@ public class RGBHistogramDescriptor implements Feature {
 
 	public RGBHistogramDescriptor(int numBins) {
 		this.rgbHistogram           = new int[numBins][3];
-		this.normalizedRGBHistogram = computeNormalizedHistogram(rgbHistogram);
+		this.normalizedRGBHistogram = new int[numBins][3];
 	}
 
 	public void add(int val, String color) throws Exception {
 		
-		int band = colorInputTest( color );	
-		
+		int band = colorInputTest( color );			
 		rgbHistogram[val][band]++;
 	}
 
@@ -44,6 +43,13 @@ public class RGBHistogramDescriptor implements Feature {
 	public int getNumBins() {
 		return rgbHistogram.length;
 	}
+	
+	/**
+	 * @return the number of bands
+	 */
+	public int getNumBands() {
+		return rgbHistogram[0].length;
+	}
 
 	/**
 	 * Normalize the input RGB histogram.
@@ -53,23 +59,23 @@ public class RGBHistogramDescriptor implements Feature {
 	 * @return
 	 *     Normalized histogram (RGB)
 	 */   
-	public int[][] computeNormalizedHistogram( int[][] hist ){
+	public int[][] computeNormalizedHistogram(){
 		
-		int[][] cdf = new int[hist.length][3];
+		int[][] cdf = new int[rgbHistogram.length][3];
 		
 		for( int j=0; j < 3; j++ ){
 			
 			int min, numPixels;			
 			
 			//construct the red cdf
-			cdf[0][j] = hist[0][j];
+			cdf[0][j] = rgbHistogram[0][j];
 			min       =  cdf[0][j];
-			numPixels = hist[0][j];
+			numPixels = rgbHistogram[0][j];
 			
-			for( int i=1; i < hist.length; i++ ){
+			for( int i=1; i < rgbHistogram.length; i++ ){
 				
-				cdf[i][j]  = hist[i][j]+cdf[i-1][j];
-				numPixels += hist[i][j];
+				cdf[i][j]  = rgbHistogram[i][j]+cdf[i-1][j];
+				numPixels += rgbHistogram[i][j];
 				
 				if( min > cdf[i][j] ){
 					min = cdf[i][j];
@@ -79,11 +85,9 @@ public class RGBHistogramDescriptor implements Feature {
 			//normalize the histogram
 			for( int i=0; i < cdf.length; i++ ){
 			
-				cdf[i][0] = Math.round( (float)( ((cdf[i][0]-min)/(numPixels-min))*255 ) );
-			}
-		
-		}
-		
+				cdf[i][j] = Math.round( (float)( (float)((cdf[i][j]-min)/(float)(numPixels-min))*255 ) );
+			}		
+		}		
 		return cdf;
 	}
 	
@@ -107,22 +111,26 @@ public class RGBHistogramDescriptor implements Feature {
 				}
 			}
 		}
-		
-		return s;
-	
+		return s;	
 	}
 
+	public int get(int x, int band) {
+		return rgbHistogram[x][band];
+	}
+	
+	public int getNormalized(int x, int band) {
+		return normalizedRGBHistogram[x][band];
+	}	
+	
 	public int get(int x, String color) throws Exception {
 		
-		int band = colorInputTest( color );	
-		
+		int band = colorInputTest( color );			
 		return rgbHistogram[x][band];
 	}
 	
 	public int getNormalized(int x, String color) throws Exception {
 		
-		int band = colorInputTest( color );
-				
+		int band = colorInputTest( color );				
 		return normalizedRGBHistogram[x][band];
 	}
 	
