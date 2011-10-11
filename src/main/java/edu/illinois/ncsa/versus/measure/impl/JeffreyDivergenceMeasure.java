@@ -12,7 +12,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 
 /**
- * Kullback-Leibler Divergence of two features.
+ * Jeffrey Divergence of two features. The image histograms are modified s.t. they satisfy the requirements of a probability mass funtion.  
  * 
  * @author Devin Bonnie
  */
@@ -29,29 +29,36 @@ public class JeffreyDivergenceMeasure implements Measure {
 	private SimilarityNumber compare( RGBHistogramDescriptor feature1, RGBHistogramDescriptor feature2 ) throws Exception {
 		
 		// Check feature lengths, they must be equal
-		if( feature1.getNumBins() != feature2.getNumBins() ) {
-			
+		if( feature1.getNumBins() != feature2.getNumBins() ) {			
 			throw new Exception("Features must have the same length");
-			//return null?
 		}
 		
 		int[][] normHist1 = feature1.computeNormalizedHistogram();
 		int[][] normHist2 = feature2.computeNormalizedHistogram();		
 		double dist       = 0;
+		double max1       = 0;
+		double max2       = 0;		
 		
 		for( int i=0; i < normHist1[0].length; i++ ){
 			
 			for( int j=0; j < normHist1.length; j++ ){					
+				max1 += normHist1[j][i];
+				max2 += normHist2[j][i];				
+			}		
+
+			for( int j=0; j < normHist1.length; j++ ){					
 				//ignore zero bins
 				if( (normHist1[j][i] != 0.0) && (normHist2[j][i] != 0.0) ){						
 					
-					double Mi = ( (double)normHist1[j][i] + (double)normHist2[j][i] ) / 2;
-					
-					dist += (double)normHist1[j][i] * Math.log( (double)normHist2[j][i] / Mi ) + (double)normHist2[j][i] * Math.log( (double)normHist2[j][i] / Mi );
+					double a  = (double)normHist1[j][i] / max1;
+					double b  = (double)normHist2[j][i] / max2;					
+					double Mi = ( a + b ) / 2;					
+					dist     += a * Math.log( a / Mi ) + b * Math.log( b / Mi );
 				}
-			}	
+			}
+			max1 = 0;
+			max2 = 0;
 		}		
-		
 		return new SimilarityNumber(dist);
 	}
 	/**
@@ -66,25 +73,31 @@ public class JeffreyDivergenceMeasure implements Measure {
 		
 		// Check feature lengths, they must be equal
 		if( feature1.getNumBins() != feature2.getNumBins() ) {
-			
 			throw new Exception("Features must have the same length");
-			//return null?
 		}
 		
 		int[] normHist1 = feature1.computeNormalizedHistogram();
 		int[] normHist2 = feature2.computeNormalizedHistogram();		
 		double dist     = 0;
+		double max1     = 0;
+		double max2     = 0;		
 		
-		for( int i=0; i < normHist1.length; i++ ){							
-			//ignore zero bins
-			if( (normHist1[i] != 0.0) && (normHist2[i] != 0.0) ){						
-				
-				double Mi = ( (double)normHist1[i] + (double)normHist2[i] ) / 2;
-				
-				dist += (double)normHist1[i] * Math.log( (double)normHist2[i] / Mi ) + (double)normHist2[i] * Math.log( (double)normHist2[i] / Mi );
-			}
+	
+		for( int j=0; j < normHist1.length; j++ ){					
+			max1 += normHist1[j];
+			max2 += normHist2[j];				
 		}		
-		
+
+		for( int j=0; j < normHist1.length; j++ ){					
+			//ignore zero bins
+			if( (normHist1[j] != 0.0) && (normHist2[j] != 0.0) ){						
+				
+				double a  = (double)normHist1[j] / max1;
+				double b  = (double)normHist2[j] / max2;					
+				double Mi = ( a + b ) / 2;					
+				dist     += a * Math.log( a / Mi ) + b * Math.log( b / Mi );
+			}
+		}					
 		return new SimilarityNumber(dist);
 	}
 	
@@ -100,30 +113,35 @@ public class JeffreyDivergenceMeasure implements Measure {
 		
 		// Check feature lengths, they must be equal
 		if( feature1.getNumBins() != feature2.getNumBins() ) {
-			
 			throw new Exception("Features must have the same length");
-			//return null?
 		}
 			
 		double dist = 0;
+		double max1 = 0;
+		double max2 = 0;
 		
-		for( int i=0; i < feature1.getNumBins(); i++ ){
-			
-			for( int j=0; j < feature1.getNumBins(); j++ ){
-				
-				for( int k=0; k < feature1.getNumBins(); k++ ){					
-					
+		for( int i=0; i < feature1.getNumBins(); i++ ){			
+			for( int j=0; j < feature1.getNumBins(); j++ ){				
+				for( int k=0; k < feature1.getNumBins(); k++ ){		
+					max1 += feature1.get(i,j,k);
+					max2 += feature2.get(i,j,k);
+				}
+			}
+		}
+		
+		for( int i=0; i < feature1.getNumBins(); i++ ){			
+			for( int j=0; j < feature1.getNumBins(); j++ ){				
+				for( int k=0; k < feature1.getNumBins(); k++ ){	
 					//ignore zero bins
-					if( (feature1.get(i,j,k) != 0.0) && (feature2.get(i,j,k) != 0.0) ){						
-						
-						double Mi = ( (double)feature1.get(i,j,k) + (double)feature2.get(i,j,k) ) / 2;
-						
-						dist += (double)feature1.get(i,j,k) * Math.log( (double)feature1.get(i,j,k) / Mi ) + (double)feature2.get(i,j,k) * Math.log( (double)feature2.get(i,j,k) / Mi );
+					if( (feature1.get(i,j,k) != 0.0) && (feature2.get(i,j,k) != 0.0) ){		
+						double a  = (double)feature1.get(i,j,k) / max1;
+						double b  = (double)feature2.get(i,j,k) / max2;						
+						double Mi = ( a + b ) / 2;						
+						dist     += a * Math.log( a / Mi ) + b * Math.log( b / Mi );
 					}
 				}
 			}	
-		}		
-		
+		}				
 		return new SimilarityNumber(dist);
 	}
 	
