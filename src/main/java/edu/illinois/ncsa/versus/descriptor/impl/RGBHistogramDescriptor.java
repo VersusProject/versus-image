@@ -38,7 +38,14 @@ public class RGBHistogramDescriptor implements Feature {
 	}
 
 	/**
-	 * @return the numBins
+	 * @return The rgb histogram. 
+	 */
+	public int[][] getHistogram(){
+		return rgbHistogram;
+	}
+	
+	/**
+	 * @return the number of bins
 	 */
 	public int getNumBins() {
 		return rgbHistogram.length;
@@ -54,8 +61,6 @@ public class RGBHistogramDescriptor implements Feature {
 	/**
 	 * Normalize the input RGB histogram.
 	 * 
-	 * @param hist
-	 *     Un-normalized histogram (RGB)
 	 * @return
 	 *     Normalized histogram (RGB)
 	 */   

@@ -52,6 +52,15 @@ public class PixelHistogramDescriptor implements Feature {
 		return numBins;
 	}
 
+	/**
+	 * Return the histogram in case the measures need to modify it. 
+	 * 
+	 * @return The pixel histogram. 
+	 */
+	public int[][][] getHistogram(){
+		return histogram; 
+	}
+	
 
 	@Override
 	public String getName() {
