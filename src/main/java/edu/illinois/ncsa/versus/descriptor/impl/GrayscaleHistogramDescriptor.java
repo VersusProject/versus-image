@@ -35,6 +35,13 @@ public class GrayscaleHistogramDescriptor implements Feature {
 	}
 
 	/**
+	 * @return the grayscale histogram
+	 */
+	public int[] getHistogram(){
+		return histogram; 
+	}
+	
+	/**
 	 * @return the numBins
 	 */
 	public int getNumBins() {
@@ -67,14 +74,12 @@ public class GrayscaleHistogramDescriptor implements Feature {
 			if( min > cdf[i] ){
 				min = cdf[i];
 			}			
-		}
-				
+		}				
 		//normalize the histogram
 		for( int i=0; i < cdf.length; i++ ){
 		
 			cdf[i] = Math.round( (float)( ((float)(cdf[i]-min)/(float)(numPixels-min))*255 ) );
-		}
-		
+		}		
 		return cdf;
 	}
 	
