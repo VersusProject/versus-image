@@ -32,9 +32,7 @@ public class KLdivergenceMeasure implements Measure {
 		if( feature1.getNumBins() != feature2.getNumBins() ) {			
 			throw new Exception("Features must have the same length");
 		}
-		
-		int[][][] pHist1 = feature1.getHistogram(); 
-		int[][][] pHist2 = feature2.getHistogram(); 
+
 		double max1      = 0;
 		double max2      = 0;		
 		double dist      = 0;
