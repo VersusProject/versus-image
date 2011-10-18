@@ -16,7 +16,7 @@ import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
- * Extract RGB image from HasPixels adapter.
+ * Extract Grayscale image from HasPixels adapter.
  * 
  * @author Luigi Marini, Devin Bonnie
  * 
@@ -52,7 +52,6 @@ public class GrayscaleHistogramExtractor implements Extractor {
 					if (pixels[x][y].length == 1) {
 						r = (int) pixels[x][y][0];
 						histogram.add(r);
-
 					}
 					//TODO: else throw exception
 					else{
