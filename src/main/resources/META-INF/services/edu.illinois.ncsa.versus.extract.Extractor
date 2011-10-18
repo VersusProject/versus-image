@@ -4,3 +4,4 @@ edu.illinois.ncsa.versus.extract.impl.PixelHistogramExtractor
 edu.illinois.ncsa.versus.extract.impl.RGBHistogramExtractor
 edu.illinois.ncsa.versus.extract.impl.GrayscaleHistogramExtractor
 edu.illinois.ncsa.versus.extract.impl.SignatureVectorExtraction
+edu.illinois.ncsa.versus.extract.impl.SurfFeatureExtractor
