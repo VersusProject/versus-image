@@ -107,7 +107,4 @@ public class GrayscaleHistogramDescriptor implements Feature {
 		return histogram[x];
 	}
 	
-	public int getNormalized(int x){
-		return normalizedHistogram[x];
-	}
 }
