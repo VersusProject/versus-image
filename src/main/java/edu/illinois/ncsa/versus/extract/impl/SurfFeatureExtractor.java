@@ -3,20 +3,13 @@
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import java.lang.Double;
-
-import com.googlecode.javacpp.*;
-import com.googlecode.javacv.*;
+import java.nio.FloatBuffer;
+import java.util.*;
 
 import static com.googlecode.javacv.cpp.opencv_core.*;
-import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 import static com.googlecode.javacv.cpp.opencv_features2d.*;
 
-import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.Adapter;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
@@ -26,7 +19,8 @@ import edu.illinois.ncsa.versus.descriptor.impl.SurfFeatureDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
- * Extract sift features from HasPixels adapter.
+ * Extract sift features from HasPixels adapter. This is done for both RGB and grayscale images. The code before the sift
+ * feature extraction can be used as a general method from a buffered image to an IPLIMAGE
  * 
  * @author Devin Bonnie
  * 
@@ -41,7 +35,7 @@ public class SurfFeatureExtractor implements Extractor {
 
 	@Override
 	public String getName() {
-		return "Pixels to Sift Features";
+		return "Pixels to Surf Features";
 	}
 
 	@Override
@@ -49,54 +43,68 @@ public class SurfFeatureExtractor implements Extractor {
 				
 		HasRGBPixels hasPixels = (HasRGBPixels) adapter;			
 		double[][][] pixels    = hasPixels.getRGBPixels();
-		int width              = pixels.length;
-		int height             = pixels[0].length;
+		int height             = pixels.length;
+		int width              = pixels[0].length;			
 		int bands              = pixels[0][0].length;
-		IplImage image         = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, bands);
+		IplImage image         = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1);
 		
 		//CONVERT THE DOUBLE ARRAY TO IPLIMAGE-----------------------------------------------------------|
 		//rgb image, set each RGB pixel to BGR format for iplimage
-		if ( bands == 3){ 					
-			for (int i=0; i < width; i++){
-				for (int j=0; j < height; j++){
+		if ( bands == 3 ){ 	
+			IplImage bgrImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3);
+			
+			for (int i=0; i < height; i++){
+				for (int j=0; j < width; j++){
 					
 					int r = (int)pixels[i][j][0];
 					int g = (int)pixels[i][j][1];
 					int b = (int)pixels[i][j][2];
 					
 					//iplimage stores pixels as BGR
-					cvSet2D(image, i, j, cvScalar(b,g,r,0) );					
+					cvSet2D(bgrImage,i,j,cvScalar(b,g,r,0));					
 				}
 			}
+			cvCvtColor(bgrImage,image,CV_BGR2GRAY);
 		}
-		//grayscale image, easy to serialize data and put in the byte buffer.  
-		else if( bands == 1) { 			
-			int index     = 0;
-			byte[] bArray = new byte[width*height];
-			
-			for (int i=0; i<width; i++){
-				for (int j=0; j<height; j++){	
-					
-					Double tmp    = new Double( pixels[i][j][0] );
-					bArray[index] = tmp.byteValue();
-					index++;
+		//grayscale image to iplimage 
+		else if( bands == 1 ) { 				
+			for (int i=0; i<height; i++){
+				for (int j=0; j<width; j++){	
+
+					int pix = (int)pixels[i][j][0];
+					cvSet2D(image,i,j,cvScalar(pix,0,0,0));	
 				}
 			}
-			image.getByteBuffer().put(bArray);
 		}
 		else{
 			throw new Exception("Unsupported double array image representation");
 		}
 		//END CONVERSION---------------------------------------------------------------------------------|
-
+		
 		//extract the surf descriptors / keypoints...
+		CvSeq cvKeypoints   = new CvSeq(null);
+		CvSeq cvDescriptors = new CvSeq(null);
+		CvSURFParams params = cvSURFParams(500, 0);//default parameters		
+		cvExtractSURF( image, null, cvKeypoints, cvDescriptors, CvMemStorage.create(), params, 0);
+	
+		//loop through and convert the keypoints and descriptors into lists, for the SurfFeatureDescriptor.
+		//this is done s.t. the openCV data structures are only needed in this extractor.
+		ArrayList<double[]> surfKeys = new ArrayList<double[]>();
+		ArrayList<float[]>  surfDesc = new ArrayList<float[]>();		
 		
+		for(int index=0; index<cvKeypoints.elem_size(); index++){
+			
+			CvSURFPoint cvPoint = new CvSURFPoint(cvGetSeqElem(cvKeypoints, index));		
+			double info[]       = {cvPoint.pt().x(), cvPoint.pt().y(), cvPoint.dir(), cvPoint.laplacian(), cvPoint.hessian(), cvPoint.size()};
+			surfKeys.add(info); 
+			
+			FloatBuffer objectDescriptors = cvGetSeqElem(cvDescriptors, index).capacity(cvDescriptors.elem_size()).asByteBuffer().asFloatBuffer();	
+		    float[] floatArray            = new float[objectDescriptors.limit()];
+		    objectDescriptors.get(floatArray);
+		    surfDesc.add(floatArray);
+		}
 		
-		//store everything in a surf feature descriptor (versus representation)
-
-		
-		//deallocate CvMat or IPLIMAGE when finished extracting descriptors
-		return new SurfFeatureDescriptor();
+		return new SurfFeatureDescriptor(surfKeys,surfDesc);
 	}
 
 
