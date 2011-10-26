@@ -14,7 +14,6 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 public class GrayscaleHistogramDescriptor implements Feature {
 
 	private final int[] histogram;	
-	private int[] normalizedHistogram;
 
 	public GrayscaleHistogramDescriptor() {
 		this(256);
@@ -22,7 +21,6 @@ public class GrayscaleHistogramDescriptor implements Feature {
 
 	public GrayscaleHistogramDescriptor(int numBins) {
 		this.histogram           = new int[numBins];
-		this.normalizedHistogram = new int[numBins];
 	}
 
 	public void add(int val) {
