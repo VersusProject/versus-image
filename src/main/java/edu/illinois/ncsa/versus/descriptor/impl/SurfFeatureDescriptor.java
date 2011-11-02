@@ -9,9 +9,10 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 /**
  * Surf features extracted from OpenCV (via JavaCV).
  * 
+ * The keypoints and descriptors are each stored in an ArrayList (container). 
+ * 
  * A keypoint is given as double[] = {x coordinate, y coordinate, direction, laplacian, hessian, size}
- *
- * A descriptor is given as float[64] or [128] (default is 64)
+ * A descriptor is given as float[64] or [128] (default from extractor is 64)
  * 
  * @author Devin Bonnie
  * 
@@ -42,7 +43,20 @@ public class SurfFeatureDescriptor implements Feature {
 	public String toString() {
 		
 		String s = "Showing contents of " + getName() + "\n";
-		//TODO		
+
+		for(int i=0; i<numKeypoints; i++){
+			
+			double[] keyInfo =  cvKeypoints.get(i);
+			float[] descInfo =  cvDescriptors.get(i);
+			
+			s = s + "Keypoint " + i + "x: " +keyInfo[0]+ "y: "+keyInfo[1]+ "direction: "+keyInfo[2]
+					+"laplacian: "+keyInfo[3]+"hessian: "+keyInfo[4]+ "size: "+keyInfo[5]; 
+			s = s + "Descriptor: ";
+			for(int j=0; j<descInfo.length; j++){
+				s = s + descInfo + " ";
+			}			
+		}
+		
 		return s;	
 	}
 	
@@ -79,9 +93,18 @@ public class SurfFeatureDescriptor implements Feature {
 		return cvDescriptors.get(index);
 	}
 	
+	/*
+	 * Returns the length of a keypoint container.
+	 * @return int length
+	 */
 	public int getKeypointLength(){
 		return cvKeypoints.get(0).length;
 	}
+	
+	/*
+	 * Returns the length of a descriptor container.
+	 * @return int length
+	 */
 	public int getDescriptorLength(){
 		return cvDescriptors.get(0).length;
 	}
