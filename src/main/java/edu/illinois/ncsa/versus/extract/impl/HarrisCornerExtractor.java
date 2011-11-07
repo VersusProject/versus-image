@@ -4,12 +4,6 @@
 package edu.illinois.ncsa.versus.extract.impl;
 
 import java.util.*;
-
-import com.googlecode.javacpp.Loader;
-import com.googlecode.javacv.CanvasFrame;
-
-import static com.googlecode.javacv.cpp.opencv_objdetect.*;
-import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_core.*;
 import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
@@ -22,8 +16,7 @@ import edu.illinois.ncsa.versus.descriptor.impl.HarrisCornerDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
- * Extract sift features from HasPixels adapter. This is done for both RGB and grayscale images. The code before the sift
- * feature extraction can be used as a general method from a buffered image to an IPLIMAGE
+ * Extract harris corners from HasPixels adapter. This is done for both RGB and grayscale images. 
  * 
  * @author Devin Bonnie
  * 
@@ -96,8 +89,7 @@ public class HarrisCornerExtractor implements Extractor {
 		//END CONVERSION---------------------------------------------------------------------------------|
 		
 		//get the Harris corners via javacv
-		cvCornerHarris(image, cornerDst, blockSize, apertureSize, k);		
-		
+		cvCornerHarris(image, cornerDst, blockSize, apertureSize, k);			
 		
 		//convert the iplimage to a double array and pass that to the descriptor; the measure can worry about the threshold. 
 		double[][] hc = new double[cornerDst.width()][cornerDst.height()];
@@ -105,7 +97,7 @@ public class HarrisCornerExtractor implements Extractor {
 		for( int i=0; i<cornerDst.width(); i++){
 			for( int j=0; j<cornerDst.height(); j++){
 				
-				CvScalar pt = cvGet2D(image,0,0);
+				CvScalar pt = cvGet2D(image,i,j);
 				hc[i][j]    = pt.getVal(0);
 			}			
 		}
