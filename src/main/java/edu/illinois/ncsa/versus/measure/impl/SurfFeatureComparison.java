@@ -7,6 +7,7 @@ import java.lang.Double;
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.SurfFeatureDescriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.SurfFeatureDescriptor.SurfPoint;
 import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
@@ -22,31 +23,25 @@ public class SurfFeatureComparison implements Measure {
 
 	public SimilarityNumber compare(SurfFeatureDescriptor feature1, SurfFeatureDescriptor feature2) throws Exception {
 
-		double[] f1_key      = new double[feature1.getKeypointLength()];
-		double[] f2_key      = new double[feature2.getKeypointLength()];
-		float[] f1_desc      = new float[feature1.getDescriptorLength()];
-		float[] f2_desc      = new float[feature2.getDescriptorLength()];
 		boolean[] matches    = new boolean[feature1.getLength()];
 		double threshold     = 0.8;
 		double matchCount    = 0;
 
 		for( int i=0; i<feature1.getLength(); i++ ){
 			
-			f1_key           = feature1.getKeypoint(i);
-			f1_desc          = feature1.getDescriptor(i);			
+			SurfPoint f1     = feature1.get(i);
 			double[] minDist = {Double.MAX_VALUE,Double.MAX_VALUE};
 			
 			for( int j=0; j<feature2.getLength(); j++ ){
 				
-				f2_key      = feature2.getKeypoint(j);
-				f2_desc     = feature2.getDescriptor(j);
-				double dist = 0;
+				SurfPoint f2 = feature2.get(j);
+				double dist  = 0;
 				
-				if( f1_key[3] == f2_key[3] ){//check if laplacians match
+				if( f1.laplacian() == f2.laplacian() ){
 					
 					//euclidean distance: compare the descriptors					
-					for( int k=0; k<f1_desc.length; k++ ){
-						dist += Math.pow((double)f1_desc[k] - (double)f2_desc[k], 2);
+					for( int k=0; k<f1.getDescriptorLength(); k++ ){
+						dist += Math.pow((double)f1.getDescriptorValue(k) - (double)f2.getDescriptorValue(k), 2);
 					}					
 					dist = Math.sqrt(dist);
 					

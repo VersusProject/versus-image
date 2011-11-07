@@ -19,14 +19,13 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
  */
 public class SurfFeatureDescriptor implements Feature {
 
-	private final ArrayList<double[]> cvKeypoints;
-	private final ArrayList<float[]>  cvDescriptors;
-	private final int                 numKeypoints;
+	private final ArrayList<SurfPoint> surfFeatures;
+	private final int numPoints;
+	
 
-	public SurfFeatureDescriptor( ArrayList<double[]> keys, ArrayList<float[]> desc ) {
-		this.cvKeypoints   = keys;
-		this.cvDescriptors = desc;
-		this.numKeypoints  = cvKeypoints.size(); //is also equal to cvDescriptors.size()
+	public SurfFeatureDescriptor( ArrayList<SurfPoint> input) {
+		this.surfFeatures = input;
+		this.numPoints = input.size(); 
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public class SurfFeatureDescriptor implements Feature {
 
 	@Override
 	public String getName() {
-		return "Surf Feature";
+		return "Surf Features";
 	}
 
 	@Override
@@ -44,70 +43,101 @@ public class SurfFeatureDescriptor implements Feature {
 		
 		String s = "Showing contents of " + getName() + "\n";
 
-		for(int i=0; i<numKeypoints; i++){
+		for(int i=0; i<numPoints; i++){
 			
-			double[] keyInfo =  cvKeypoints.get(i);
-			float[] descInfo =  cvDescriptors.get(i);
+			SurfPoint pt =  surfFeatures.get(i);
 			
-			s = s + "Keypoint " + i + "x: " +keyInfo[0]+ "y: "+keyInfo[1]+ "direction: "+keyInfo[2]
-					+"laplacian: "+keyInfo[3]+"hessian: "+keyInfo[4]+ "size: "+keyInfo[5]; 
-			s = s + "Descriptor: ";
-			for(int j=0; j<descInfo.length; j++){
-				s = s + descInfo + " ";
+			s = s + "Keypoint " + i + "x: " +pt.x()+ "y: "+pt.y()+ "direction: "+pt.direction()
+					+"laplacian: "+pt.laplacian()+"hessian: "+pt.hessian()+ "size: "+pt.size(); 
+			s = s + " Descriptor: ";
+						
+			for(int j=0; j<pt.getDescriptorLength(); j++){
+				s = s + pt.getDescriptorValue(i) + " ";
 			}			
 		}
 		
 		return s;	
 	}
 	
+	/**
+	 * Return the number of SURF keypoint / descriptor pairs.
+	 * 
+	 * @return int
+	 */
 	public int getLength(){
-		return numKeypoints;
+		return numPoints;
 	}
 	
-	/*
-	 * Returns the relevent keypoint information.
-	 * @return info[]
-	 * 		double array containing {x,y,direction,laplacian,hessian,size}
-	 *      http://opencv.willowgarage.com/documentation/python/feature_detection.html
+	/**
+	 * Returns the relevant point information.
+	 *
+	 * @return SurfPoint
 	 */
-	public double[] getKeypoint(int index) throws Exception{
+	public SurfPoint get(int index) throws Exception{
 		
-		if(index >= numKeypoints){
+		if(index >= numPoints){
 			throw new Exception("Not a valid keypoint index: out of bounds");
 		}
 		
-		return cvKeypoints.get(index);
+		return surfFeatures.get(index);
 	}
 	
-	/*
-	 * Returns the relevent descriptor information.
-	 * @return info[]
-	 * 		float array containing the descriptor info (default is 64 entries). 
-	 */
-	public float[] getDescriptor(int index) throws Exception {
-		
-		if(index >= numKeypoints){
-			throw new Exception("Not a valid keypoint index: out of bounds");
-		}
+	//#############################################################################
+	
+	public static class SurfPoint {
 
-		return cvDescriptors.get(index);
+		private double x;
+		private double y;
+		private double direction;
+		private double laplacian;
+		private double hessian;
+		private double size;
+		private float[] descriptors;
+		private int descriptorLength;
+		
+		public SurfPoint( double[] keypoints, float[] descriptors ){
+			this.x                = keypoints[0];
+			this.y                = keypoints[1];
+			this.direction        = keypoints[2];
+			this.laplacian        = keypoints[3];
+			this.hessian          = keypoints[4];
+			this.size             = keypoints[5];
+			this.descriptors      = descriptors;			
+			this.descriptorLength = descriptors.length;
+		}
+		
+		
+		public double x(){
+			return x;
+		}
+		
+		public double y(){
+			return y;
+		}
+		public double direction(){
+			return direction;
+		}
+		public double laplacian(){
+			return laplacian;
+		}
+		public double hessian(){
+			return hessian;
+		}
+		public double size(){
+			return size;
+		}
+		public int getDescriptorLength(){
+			return descriptorLength;
+		}
+		public float[] getDescriptorArray(){
+			return descriptors;
+		}
+		public float getDescriptorValue(int index){
+			return descriptors[index];
+		}
+		
 	}
 	
-	/*
-	 * Returns the length of a keypoint container.
-	 * @return int length
-	 */
-	public int getKeypointLength(){
-		return cvKeypoints.get(0).length;
-	}
-	
-	/*
-	 * Returns the length of a descriptor container.
-	 * @return int length
-	 */
-	public int getDescriptorLength(){
-		return cvDescriptors.get(0).length;
-	}
 	
 }
 
