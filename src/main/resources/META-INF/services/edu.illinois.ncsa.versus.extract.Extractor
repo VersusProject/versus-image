@@ -1,9 +1,10 @@
 edu.illinois.ncsa.versus.extract.impl.ArrayFeatureExtractor
 edu.illinois.ncsa.versus.extract.impl.ColorAverageVectorFeatureExtractor
+edu.illinois.ncsa.versus.extract.impl.GrayscaleHistogramExtractor
+edu.illinois.ncsa.versus.extract.impl.HarrisCornerExtractor
+edu.illinois.ncsa.versus.extract.impl.HoughLinesExtractor
+edu.illinois.ncsa.versus.extract.impl.MserFeatureExtractor
 edu.illinois.ncsa.versus.extract.impl.PixelHistogramExtractor
 edu.illinois.ncsa.versus.extract.impl.RGBHistogramExtractor
-edu.illinois.ncsa.versus.extract.impl.GrayscaleHistogramExtractor
 edu.illinois.ncsa.versus.extract.impl.SignatureVectorExtraction
-edu.illinois.ncsa.versus.extract.impl.HarrisCornerExtractor
 edu.illinois.ncsa.versus.extract.impl.SurfFeatureExtractor
-edu.illinois.ncsa.versus.extract.impl.MserFeatureExtractor
