@@ -16,6 +16,7 @@ import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.SurfFeatureDescriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.SurfFeatureDescriptor.SurfPoint;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
@@ -87,25 +88,24 @@ public class SurfFeatureExtractor implements Extractor {
 		CvSURFParams params = cvSURFParams(500, 0);//default parameters		
 		cvExtractSURF( image, null, cvKeypoints, cvDescriptors, CvMemStorage.create(), params, 0);
 	
-		//loop through and convert the keypoints and descriptors into lists, for the SurfFeatureDescriptor.
-		//this is done s.t. the openCV data structures are only needed in this extractor.
-		ArrayList<double[]> surfKeys = new ArrayList<double[]>();
-		ArrayList<float[]>  surfDesc = new ArrayList<float[]>();		
+
+		ArrayList<SurfPoint> points = new ArrayList<SurfPoint>();
 		
 		for(int index=0; index<cvKeypoints.elem_size(); index++){
-			
+
 			CvSURFPoint cvPoint = new CvSURFPoint(cvGetSeqElem(cvKeypoints, index));		
 			double info[]       = {cvPoint.pt().x(), cvPoint.pt().y(), cvPoint.dir(), cvPoint.laplacian(), cvPoint.hessian(), cvPoint.size()};
-			surfKeys.add(info); 
 			
 			FloatBuffer objectDescriptors = cvGetSeqElem(cvDescriptors, index).capacity(cvDescriptors.elem_size()).asByteBuffer().asFloatBuffer();	
 		    float[] floatArray            = new float[objectDescriptors.limit()];
 		    objectDescriptors.get(floatArray);
-		    surfDesc.add(floatArray);
+
+		    SurfPoint pt = new SurfPoint(info, floatArray);
+		    points.add(pt);
 		}
 		
 		cvReleaseImage(image);
-		return new SurfFeatureDescriptor(surfKeys,surfDesc);
+		return new SurfFeatureDescriptor(points);
 	}
 
 
