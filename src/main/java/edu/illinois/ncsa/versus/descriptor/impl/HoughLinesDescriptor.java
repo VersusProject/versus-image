@@ -9,9 +9,9 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 import edu.illinois.ncsa.versus.descriptor.impl.Pixel;
 
 /**
- * Binned pixel histogram.
+ * Hough Lines
  * 
- * @author Luigi Marini, Devin Bonnie
+ * @author Devin Bonnie
  * 
  */
 public class HoughLinesDescriptor implements Feature {
@@ -25,6 +25,13 @@ public class HoughLinesDescriptor implements Feature {
 		this.numLines = lines.size();
 	}
 
+	
+	public Pixel[] getLine(int index){
+		return lines.get(index);
+	}
+	
+	
+	
 	@Override
 	public String getType() {
 		return this.getClass().toString();
