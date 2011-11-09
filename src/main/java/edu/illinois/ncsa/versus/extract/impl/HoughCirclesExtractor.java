@@ -14,12 +14,11 @@ import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.Pixel;
-import edu.illinois.ncsa.versus.descriptor.impl.HoughLinesDescriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.HoughCirclesDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
-
 /**
- * Extract hough lines from HasPixels adapter. This is done for both RGB and grayscale images.
+ * Extract Hough circles from HasPixels adapter. This is done for both RGB and grayscale images.
  * 
  * @author Devin Bonnie
  * 
@@ -83,31 +82,27 @@ public class HoughCirclesExtractor implements Extractor {
 		cvSmooth(image,image,CV_GAUSSIAN,9,0,0,0);
 		
 		//Hough Circles Parameters
-		double dp            = 2; //accumulator resolution: if it is 1, accumulator will have the same input resolution, if 2, accumulator will have twice smaller width and height
-		double minDist       = 50; //minimum distance between detected circles centers
-		double param1        = 100; //the higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller)
-		double param2        = 200; //accumulator threshold at the center detection stage
-		int minRadius        = Math.min( (int)Math.round(0.10*width), (int)Math.round(0.10*height) ); //minimum radius of circles to search for
-		int maxRadius        = Math.max(width, height); //maximum radius of circles to search for
-		CvSeq circles        = new CvSeq(null);		
-		circles              = cvHoughCircles(image, CvMemStorage.create(), CV_HOUGH_GRADIENT, dp, minDist, param1, param2, minRadius, maxRadius );
+		double dp                 = 2; //accumulator resolution: if it is 1, accumulator will have the same input resolution, if 2, accumulator will have twice smaller width and height
+		double minDist            = 50; //minimum distance between detected circles centers
+		double param1             = 100; //the higher threshold of the two passed to Canny edge detector (the lower one will be twice smaller)
+		double param2             = 200; //accumulator threshold at the center detection stage
+		int minRadius             = Math.min( (int)Math.round(0.10*width), (int)Math.round(0.10*height) ); //minimum radius of circles to search for
+		int maxRadius             = Math.max(width, height); //maximum radius of circles to search for
+		CvSeq cvCircles           = new CvSeq(null);		
+		cvCircles                 = cvHoughCircles(image, CvMemStorage.create(), CV_HOUGH_GRADIENT, dp, minDist, param1, param2, minRadius, maxRadius );
+		ArrayList<Pixel> hCircles = new ArrayList<Pixel>();
 		
-		for( int i=0; i<circles.total(); i++){
+		for( int i=0; i<cvCircles.total(); i++){
 			
-			CvPoint3D32f info = new CvPoint3D32f(cvGetSeqElem(circles,i));
+			CvPoint3D32f info = new CvPoint3D32f(cvGetSeqElem(cvCircles,i));
 			int x             = Math.round( info.x() );
 			int y             = Math.round( info.y() );
-			int radius        = Math.round( info.z() );			
+			int radius        = Math.round( info.z() );
+			hCircles.add( new Pixel(x,y,radius));
 		}
-
-
-		
+	
 		cvReleaseImage(image);
-		
-
-		
-		ArrayList<Pixel[]> lineEndpoints = new ArrayList<Pixel[]>();
-		return new HoughLinesDescriptor(lineEndpoints);
+		return new HoughCirclesDescriptor(hCircles);
 	}
 
 
@@ -120,6 +115,6 @@ public class HoughCirclesExtractor implements Extractor {
 
 	@Override
 	public Class<? extends Descriptor> getFeatureType() {
-		return HoughLinesDescriptor.class;
+		return HoughCirclesDescriptor.class;
 	}
 }
