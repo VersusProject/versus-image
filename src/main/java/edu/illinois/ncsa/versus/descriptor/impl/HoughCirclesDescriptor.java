@@ -9,7 +9,11 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 import edu.illinois.ncsa.versus.descriptor.impl.Pixel;
 
 /**
- * Hough Circles
+ * Hough Circles Descriptor. Arraylist containing Pixels in the following format:
+ * 
+ *   --  Pixel.x() and Pixel.y() and the coordinates of the center. 
+ * 
+ *   --  Pixel.z() is the radius of the circle. 
  * 
  * @author Devin Bonnie
  * 
