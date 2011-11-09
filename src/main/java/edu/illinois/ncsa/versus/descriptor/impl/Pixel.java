@@ -3,99 +3,150 @@ package edu.illinois.ncsa.versus.descriptor.impl;
 
 /**
  * Pixel class for the versus image descriptors. This (general) class encapsulates 'pixel information' with its class 
- * members. This class is public for use in other descriptors if necessary. Currently used in HoughLines and Harris Corners.
+ * members. This class is public for use in other descriptors if necessary. Currently used in Hough Lines, Hough Circles, and Harris Corners.
  *
  * @author Devin Bonnie
+ *
+ * 
  *
  */
 public class Pixel{	
 	
-	private int x;
-	private int y;
-	//private int depth; 
+	private Integer x;
+	private Integer y;
+	private Integer z;
 	private double[] intensity;
 	private String type;
 	
+	
 	/**
-	 * Position Pixel constructor. 
+	 * 2-D Position Pixel constructor. 
 	 * 
-	 * @param int 
+	 * @param xPos 
 	 * 		X-coordinate (row)
-	 * @param int 
+	 * @param yPos 
 	 * 		Y-coordinate (column)
 	 */
 	public Pixel(int xPos, int yPos){
 		
-		this.x            = xPos;
-		this.y            = yPos;
-		this.intensity    = null;
-		this.type         = "position";
+		this.x         = new Integer(xPos);
+		this.y         = new Integer(yPos);
+		this.z         = null;
+		this.intensity = null;
+		this.type      = "2Dposition";
 	}
 	
 	/**
-	 * Grayscale Pixel constructor.
+	 * 3-D Position Pixel constructor. 
 	 * 
-	 * @param int 
+	 * @param xPos 
 	 * 		X-coordinate (row)
-	 * @param int 
+	 * @param yPos 
 	 * 		Y-coordinate (column)
-	 * @param double 
-	 * 		Grayscale intensity
+	 * @param zPos
+	 * 		Z-coordinate (depth)
 	 */
-	public Pixel(int xPos, int yPos, double value){
+	public Pixel(int xPos, int yPos, int zPos){
 		
-		this.intensity    = new double[1];
-		this.x            = xPos;
-		this.y            = yPos;
-		this.intensity[0] = value;
-		this.type         = "grayscale";
+		this.x         = new Integer(xPos);
+		this.y         = new Integer(yPos);
+		this.z         = new Integer(zPos);
+		this.intensity = null;
+		this.type      = "3Dposition";
 	}
 	
+
 	/**
-	 * RGB Pixel constructor.
+	 * 2-D Grayscale/RGB Pixel constructor.
 	 * 
-	 * @param int 
+	 * @param xPos 
 	 * 		X-coordinate (row)
-	 * @param int 
+	 * @param yPos 
 	 * 		Y-coordinate (column)
-	 * @param double[3] 
-	 * 		RGB intensity {double r, double g, double b}
+	 * @param value
+	 * 		RGB intensity {double r, double g, double b} 
+	 * 					or
+	 * 		grayscale intensity {double val}
 	 */
-	public Pixel(int xPos, int yPos, double[] value) throws Exception {
+	public Pixel(int xPos, int yPos, double[] value) {
 		
-		if(value.length != 3){
-			throw new Exception("double[] value must have length == 3");
-		}
-		
-		this.intensity = new double[3];
-		this.x         = xPos;
-		this.y         = yPos;
+		this.intensity = new double[value.length];
+		this.x         = new Integer(xPos);
+		this.y         = new Integer(yPos);
+		this.z         = null;
 		this.intensity = value;
-		this.type      = "rgb";
+		
+		if(value.length == 3){
+			this.type  = "rgb";
+		}
+		else if(value.length == 1){
+			this.type = "grayscale";
+		}
 	}
+	
+	/**
+	 * 3-D Grayscale/RGB Pixel constructor.
+	 * 
+	 * @param xPos 
+	 * 		X-coordinate (row)
+	 * @param yPos 
+	 * 		Y-coordinate (column)
+	 * @param zPos 
+	 * 		Z-coordinate (depth)
+	 * @param value
+	 * 		RGB intensity {double r, double g, double b} 
+	 * 					or
+	 * 		grayscale intensity {double val}
+	 */
+	public Pixel(int xPos, int yPos, int zPos, double[] value) {
+		
+		this.intensity = new double[value.length];
+		this.x         = new Integer(xPos);
+		this.y         = new Integer(yPos);
+		this.z         = new Integer(zPos);
+		this.intensity = value;
+		
+		if(value.length == 3){
+			this.type  = "rgb";
+		}
+		else if(value.length == 1){
+			this.type = "grayscale";
+		}
+	}
+	
 	
 	/**
 	 * Return the X-coordinate
 	 * 
-	 * @return int 
+	 * @return x 
 	 */
 	public int x(){
-		return x;
+		return x.intValue();
 	}
 	
 	/**
-	 * Return the y-coordinate
+	 * Return the Y-coordinate
 	 * 
-	 * @return int 
+	 * @return y 
 	 */
 	public int y(){
-		return y;
+		return y.intValue();
+	}
+	
+	/**
+	 * Return the Z-coordinate
+	 * 
+	 * @return z 
+	 */
+	public int z(){
+		return z.intValue();
 	}
 	
 	/**
 	 * Information about the pixel type. 
-	 * @return string 
-	 * 		String, possible values are "position, grayscale, rgb". 
+	 * @return type 
+	 * 		Possible values are "position, grayscale, rgb".
+	 * 		Can also be user defined. 
 	 */
 	public String type(){
 		return type;
@@ -104,40 +155,83 @@ public class Pixel{
 	/**
 	 * Get the pixel's intensity value. 
 	 * 
-	 * @return double[] 
+	 * @return intensity
 	 * 		Null if position pixel, double[1] if grayscale, double[3] if rgb. 
 	 */
 	public double[] value(){
 		return intensity;
 	}	
 	
-	
-	public void set(int xPos, int yPos){
-		
-		x            = xPos;
-		y            = yPos;
-		intensity    = null;
-		type         = "position";
+	/**
+	 * Set the pixel's row (x).
+	 * 
+	 * @param xPos 
+	 */
+	public void setX(int xPos){		
+		x = new Integer(xPos);
 	}
 	
-	public void set(int xPos, int yPos, double value){
-		
-		intensity = new double[1];
-
-		x            = xPos;
-		y            = yPos;
-		intensity[0] = value;
-		type         = "grayscale";
+	/**
+	 * Set the pixel's column (y).
+	 * 
+	 * @param yPos 
+	 */
+	public void setY(int yPos){		
+		y = new Integer(yPos);
 	}
 	
-	public void set(int xPos, int yPos, double[] value){
-		
-		intensity = new double[3];
-		
-		x            = xPos;
-		y            = yPos;
-		intensity    = value;
-		type         = "rgb";
+	/**
+	 * Set the pixel's depth (z).
+	 * 
+	 * @param zPos 
+	 */
+	public void setZ(int zPos){		
+		z = new Integer(zPos);
+	}
+	
+	/**
+	 * Set the pixel's color value (rgb[3] or grayscale[1]).
+	 * 
+	 * @param value
+	 */
+	public void setIntensity(double[] value){
+		intensity = new double[value.length];
+		intensity = value;
+	}
+	
+	/**
+	 * Set the pixel's type.
+	 * 
+	 * @param name 
+	 */
+	public void setType(String name){
+		type = name;
+	}
+	
+	/**
+	 * Return a string containing the relevant information encapsulated in the Pixel.
+	 * 
+	 * @param s
+	 * 		Returned string. 
+	 */
+	public String toString(){
+		String s = new String();
+		if( x != null ){
+			s = s+"x: "+x.toString()+" ";
+		}
+		if( y != null ){
+			s = s+"y: "+y.toString()+" ";
+		}
+		if( z != null ){
+			s = s+"z: "+z.toString()+" ";
+		}
+		if( intensity != null){
+			s = s+"Intensity: ";
+			for( int i=0; i<intensity.length; i++){
+				s = s+intensity[i]+" ";
+			}
+		}
+		return s;
 	}
 
 }
