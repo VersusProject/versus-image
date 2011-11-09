@@ -1,5 +1,6 @@
 edu.illinois.ncsa.versus.measure.impl.BhattacharyyaDistanceMeasure
 edu.illinois.ncsa.versus.measure.impl.ChiSquaredMeasure
+edu.illinois.ncsa.versus.measure.impl.CzekanowskiMeasure
 edu.illinois.ncsa.versus.measure.impl.EarthMoversDistanceMeasure
 edu.illinois.ncsa.versus.measure.impl.HistogramDistanceMeasure
 edu.illinois.ncsa.versus.measure.impl.HistogramIntersectionMeasure
