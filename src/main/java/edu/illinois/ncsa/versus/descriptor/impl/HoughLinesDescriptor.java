@@ -9,14 +9,14 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 import edu.illinois.ncsa.versus.descriptor.impl.Pixel;
 
 /**
- * Hough Lines
+ * Hough Lines from openCV. Contains the lines processed from an image in an Arraylist as a Pixel array. 
  * 
  * @author Devin Bonnie
  * 
  */
 public class HoughLinesDescriptor implements Feature {
 
-	private ArrayList<Pixel[]> lines = new ArrayList<Pixel[]>();
+	private ArrayList<Pixel[]> lines;
 	private final int numLines;
 
 	public HoughLinesDescriptor(ArrayList<Pixel[]> input) {
@@ -25,13 +25,28 @@ public class HoughLinesDescriptor implements Feature {
 		this.numLines = lines.size();
 	}
 
-	
+	/**
+	 * Get the line at the specified index. 
+	 * 
+	 * @param index
+	 * 		integer specifying the index. 
+	 * @return
+	 * 		Pixel Array containing the line information
+	 */
 	public Pixel[] getLine(int index){
 		return lines.get(index);
 	}
 	
-	
-	
+	/**
+	 * Get the total number of lines. 
+	 * 
+	 * @return
+	 * 		integer representing the total number of lines found. 
+	 */
+	public int getNumLines(){
+		return numLines;
+	}
+		
 	@Override
 	public String getType() {
 		return this.getClass().toString();

@@ -4,6 +4,7 @@
 package edu.illinois.ncsa.versus.descriptor.impl;
 
 import edu.illinois.ncsa.versus.descriptor.Feature;
+import edu.illinois.ncsa.versus.descriptor.impl.Pixel;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ public class HarrisCornerDescriptor implements Feature {
 
 	private final ArrayList<Pixel> rawCorners;
 	private ArrayList<Pixel> thresholdedCorners;
-	
+	private final int numPixels;
 
 	/**
 	 * Takes a double array, converts to Pixels, and stores the raw Pixels in an arraylist (classmember).  
@@ -28,12 +29,29 @@ public class HarrisCornerDescriptor implements Feature {
 		
 		for( int i=0; i<input.length; i++){
 			for( int j=0; j<input[0].length; j++){
-
-				this.rawCorners.add(new Pixel(i,j,input[i][j]));
+				
+				double[] intensity = {input[i][j]};
+				
+				this.rawCorners.add(new Pixel(i,j,intensity));
 			}
 		}
+		this.numPixels = rawCorners.size();
 	}
 
+	
+	public Pixel getCornerPixel(int index){
+		return rawCorners.get(index);
+	}
+	
+	/**
+	 * Get the total number of pixels.
+	 * @return int
+	 * 		The number of pixels.
+	 */
+	public int length(){
+		return numPixels;
+	}
+	
 	@Override
 	public String getType() {
 		return this.getClass().toString();
@@ -56,7 +74,6 @@ public class HarrisCornerDescriptor implements Feature {
 				thresholdedCorners.add(p);
 			}
 		}		
-		
 		return thresholdedCorners;
 	}
 	
@@ -73,122 +90,10 @@ public class HarrisCornerDescriptor implements Feature {
 		thresholdedCorners = new ArrayList<Pixel>();	
 		for(int i=0; i<rawCorners.size(); i++){
 			Pixel p = rawCorners.get(i);
-			s = s + "Pixel: x=" + p.x() + " y=" + p.y() + " value=" + p.value()[0];
+			s = s + "Pixel: "+i+" x=" + p.x() + " y=" + p.y() + " value=" + p.value()[0];
 		}		
 		return s;
 	}
-	
-	//##############################################################################################################
-	/**
-	 * Pixel subclass for the Harris Corner Descriptor. This (general) subclass encapsulates 'pixel information' with its class 
-	 * members. This class is public for use in other descriptors if necessary. 
-	 *
-	 * @author Devin Bonnie
-	 *
-	 */
-	public class Pixel{	
-		
-		private final int x;
-		private final int y;
-		private double[] intensity;
-		private final String type;
-		
-		/**
-		 * Position Pixel constructor. 
-		 * 
-		 * @param xPos 
-		 * 		X-coordinate (row)
-		 * @param yPos 
-		 * 		Y-coordinate (column)
-		 */
-		public Pixel(int xPos, int yPos){
-			
-			this.x            = xPos;
-			this.y            = yPos;
-			this.intensity    = null;
-			this.type         = "position";
-		}
-		
-		/**
-		 * Grayscale Pixel constructor.
-		 * 
-		 * @param xPos 
-		 * 		X-coordinate (row)
-		 * @param yPos 
-		 * 		Y-coordinate (column)
-		 * @param value 
-		 * 		Grayscale intensity
-		 */
-		public Pixel(int xPos, int yPos, double value){
-			
-			this.intensity    = new double[1];
-			this.x            = xPos;
-			this.y            = yPos;
-			this.intensity[0] = value;
-			this.type         = "grayscale";
-		}
-		
-		/**
-		 * RGB Pixel constructor.
-		 * 
-		 * @param xPos 
-		 * 		X-coordinate (row)
-		 * @param yPos 
-		 * 		Y-coordinate (column)
-		 * @param value 
-		 * 		RGB intensity {double r, double g, double b}
-		 */
-		public Pixel(int xPos, int yPos, double[] value) throws Exception {
-			
-			if(value.length != 3){
-				throw new Exception("double[] value must have length == 3");
-			}
-			
-			this.intensity = new double[3];
-			this.x         = xPos;
-			this.y         = yPos;
-			this.intensity = value;
-			this.type      = "rgb";
-		}
-		
-		/**
-		 * Return the X-coordinate
-		 * 
-		 * @return x 
-		 */
-		public int x(){
-			return x;
-		}
-		
-		/**
-		 * Return the y-coordinate
-		 * 
-		 * @return y 
-		 */
-		public int y(){
-			return y;
-		}
-		
-		/**
-		 * Information about the pixel type. 
-		 * @return type 
-		 * 		String, possible values are "position, grayscale, rgb". 
-		 */
-		public String type(){
-			return type;
-		}
-		
-		/**
-		 * Get the pixel's intensity value. 
-		 * 
-		 * @return intensity 
-		 * 		Null if position pixel, double[1] if grayscale, double[3] if rgb. 
-		 */
-		public double[] value(){
-			return intensity;
-		}		
-	}
-	//##############################################################################################################
 	
 }
 

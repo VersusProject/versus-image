@@ -25,7 +25,7 @@ public class SurfFeatureDescriptor implements Feature {
 
 	public SurfFeatureDescriptor( ArrayList<SurfPoint> input) {
 		this.surfFeatures = input;
-		this.numPoints = input.size(); 
+		this.numPoints    = input.size(); 
 	}
 
 	@Override
