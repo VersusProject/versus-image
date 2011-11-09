@@ -13,12 +13,12 @@ import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 /**
- * Histogram intersection between two color histograms.
+ * Motyka Measure between two histograms.
  * 
  * @author Devin Bonnie
  * 
  */
-public class WaveHedgesMeasure implements Measure {
+public class MotykaMeasure implements Measure {
 
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
@@ -28,7 +28,7 @@ public class WaveHedgesMeasure implements Measure {
 	}
 
 	/**
-	 * Compares two RGB Histograms with Wave Hedges. 
+	 * Compares two RGB Histograms by Motyka Measure. 
 	 * 
 	 * @param RGBHistogramDescriptor
 	 * @param RGBHistogramDescriptor
@@ -44,23 +44,24 @@ public class WaveHedgesMeasure implements Measure {
 		}		
 		
 		int[][] normHist1 = feature1.computeNormalizedHistogram();
-		int[][] normHist2 = feature2.computeNormalizedHistogram();		
-		double sum[]      = {0,0,0};
+		int[][] normHist2 = feature2.computeNormalizedHistogram();
+		double s1[]       = {0,0,0};
+		double s2[]       = {0,0,0};
 		
-		for (int x=0; x < normHist2.length; x++) {			
-			for (int y=0; y < normHist2[0].length; y++){
-				
-				if( !( (normHist1[x][y] == 0) && (normHist2[x][y] == 0) ) ){
-					sum[y] += (double)Math.abs( normHist1[x][y] - normHist2[x][y] ) / (double)Math.max( normHist1[x][y], normHist2[x][y] );
-				}
+		for (int i=0; i < normHist1.length; i++){
+			for (int j=0; j < normHist1[0].length; j++){
+
+				s1[j] += Math.max( normHist1[i][j], normHist2[i][j] );
+				s2[j] += normHist1[i][j] + normHist2[i][j];
 			}
 		}
-		double result = sum[0] + sum[1] + sum[2];
-		return new SimilarityNumber(result);
+		
+		double result = s1[0]/s2[0] + s1[1]/s2[1] + s1[2]/s2[2];
+		return new SimilarityNumber( result );
 	}
 	
 	/**
-	 * Compares two Grayscale Histograms with Wave Hedges.
+	 * Compares two Grayscale Histograms by Motyka Measure.
 	 * 
 	 * @param GrayscaleHistogramDescriptor
 	 * @param GrayscaleHistogramDescriptor
@@ -76,16 +77,16 @@ public class WaveHedgesMeasure implements Measure {
 		}		
 		
 		int[] normHist1 = feature1.computeNormalizedHistogram();
-		int[] normHist2 = feature2.computeNormalizedHistogram();				
-		double sum      = 0;
+		int[] normHist2 = feature2.computeNormalizedHistogram();		
+		double s1       = 0;
+		double s2       = 0;
 		
-		for (int x=0; x < normHist1.length; x++) {
-					
-			if( !( (normHist1[x] == 0) && (normHist2[x] == 0) ) ){
-				sum += (double)Math.abs( normHist1[x] - normHist2[x] ) / (double)Math.max( normHist1[x], normHist2[x] );
-			}
-		}		
-		return new SimilarityNumber(sum);
+		for (int i=0; i < normHist1.length; i++){
+			
+			s1 += Math.max( normHist1[i], normHist2[i] );
+			s2 += normHist1[i] + normHist2[i];
+		}
+		return new SimilarityNumber(s1/s2);
 	}
 
 	@Override
@@ -95,7 +96,7 @@ public class WaveHedgesMeasure implements Measure {
 
 	@Override
 	public String getName() {
-		return "Wave Hedges (Intersection Family)";
+		return "Motyka Measure";
 	}
 
 	@Override
@@ -114,13 +115,14 @@ public class WaveHedgesMeasure implements Measure {
 			return compare(histogramFeature1, histogramFeature2);
 		}
 		else {
-			throw new UnsupportedTypeException("Similarity measure expects feature of type HistogramFeature");
+			throw new UnsupportedTypeException(
+					"Similarity measure expects feature of type HistogramFeature");
 		}
 	}
 
 	@Override
-	public Class<WaveHedgesMeasure> getType() {
-		return WaveHedgesMeasure.class;
+	public Class<MotykaMeasure> getType() {
+		return MotykaMeasure.class;
 	}
 
 }
