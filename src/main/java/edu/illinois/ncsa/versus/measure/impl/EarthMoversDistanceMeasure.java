@@ -14,7 +14,7 @@ import static com.googlecode.javacv.cpp.opencv_core.*;
 import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
 /**
- * Chi-Squared distance (Neyman's)
+ * Earth Mover's Distance (via openCV) for grayscale, RGB, and Pixel Histograms. 
  * 
  * @author Devin Bonnie
  */
@@ -23,8 +23,8 @@ public class EarthMoversDistanceMeasure implements Measure {
 	/**
 	 * Compares two grayscale Histograms using the Earth Mover's Distance
 	 * 
-	 * @param feature1 GrayscaleHistogramDescriptor
-	 * @param feature2 GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -54,10 +54,10 @@ public class EarthMoversDistanceMeasure implements Measure {
 	}
 	
 	/**
-	 * Compares two rgb Histograms using the Earth Mover's Distance
+	 * Compares two RGB Histograms using the Earth Mover's Distance
 	 * 
-	 * @param feature1 RGBHistogramDescriptor
-	 * @param feature2 RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -99,8 +99,8 @@ public class EarthMoversDistanceMeasure implements Measure {
 	/**
 	 * Compares two pixel Histograms using the Earth Mover's Distance
 	 * 
-	 * @param feature1 PixelHistogramDescriptor
-	 * @param feature2 PixelHistogramDescriptor
+	 * @param PixelHistogramDescriptor
+	 * @param PixelHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -148,16 +148,13 @@ public class EarthMoversDistanceMeasure implements Measure {
 	@Override
 	public Similarity compare(Descriptor feature1, Descriptor feature2)	throws Exception {
 		
-		if (feature1 instanceof RGBHistogramDescriptor && feature2 instanceof RGBHistogramDescriptor) {
-			
+		if (feature1 instanceof RGBHistogramDescriptor && feature2 instanceof RGBHistogramDescriptor) {			
 			return compare( (RGBHistogramDescriptor) feature1, (RGBHistogramDescriptor) feature2 );
 		}
-		else if (feature1 instanceof GrayscaleHistogramDescriptor && feature2 instanceof GrayscaleHistogramDescriptor) {
-			
+		else if (feature1 instanceof GrayscaleHistogramDescriptor && feature2 instanceof GrayscaleHistogramDescriptor) {			
 			return compare( (GrayscaleHistogramDescriptor) feature1, (GrayscaleHistogramDescriptor) feature2 );
 		}
-		else if (feature1 instanceof PixelHistogramDescriptor && feature2 instanceof PixelHistogramDescriptor) {
-			
+		else if (feature1 instanceof PixelHistogramDescriptor && feature2 instanceof PixelHistogramDescriptor) {			
 			return compare( (PixelHistogramDescriptor) feature1, (PixelHistogramDescriptor) feature2 );
 		}
 		else {

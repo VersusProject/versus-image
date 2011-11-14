@@ -19,10 +19,10 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 public class ChiSquaredMeasure implements Measure {
 	
 	/**
-	 * Compares two RGB Histograms using the Chi-Squared metric, i.e., X^2( A, B )
+	 * Compares two normalized RGB Histograms using the Chi-Squared metric, i.e., X^2( A, B )
 	 * 
-	 * @param feature1 A: RGBHistogramDescriptor
-	 * @param feature2 B: RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -36,10 +36,9 @@ public class ChiSquaredMeasure implements Measure {
 		
 		int[][] normHist1 = feature1.computeNormalizedHistogram();
 		int[][] normHist2 = feature2.computeNormalizedHistogram();	
-		double X2 = 0;
+		double X2         = 0;
 		
-		for( int i=0; i < normHist1[0].length; i++ ){
-			
+		for( int i=0; i < normHist1[0].length; i++ ){			
 			for( int j=0; j < normHist1.length; j++ ){				
 				
 				double Mi = ( normHist1[j][i] + normHist2[j][i] ) / 2.0;
@@ -54,10 +53,10 @@ public class ChiSquaredMeasure implements Measure {
 	}
 	
 	/**
-	 * Compares two Grayscale Histograms using the Chi-Squared metric, i.e., X^2( A, B )
+	 * Compares two normalized Grayscale Histograms using the Chi-Squared metric, i.e., X^2( A, B )
 	 * 
-	 * @param feature1 A: RGBHistogramDescriptor
-	 * @param feature2 B: RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */	
@@ -71,7 +70,7 @@ public class ChiSquaredMeasure implements Measure {
 		
 		int[] normHist1 = feature1.computeNormalizedHistogram();
 		int[] normHist2 = feature2.computeNormalizedHistogram();	
-		double X2 = 0;
+		double X2       = 0;
 		
 		for( int j=0; j < normHist1.length; j++ ){				
 			
@@ -88,8 +87,8 @@ public class ChiSquaredMeasure implements Measure {
 	/**
 	 * Compares two Pixel Histograms using the Chi-Squared metric, i.e., X^2( A, B )
 	 * 
-	 * @param feature1 A: RGBHistogramDescriptor
-	 * @param feature2 B: RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -103,10 +102,8 @@ public class ChiSquaredMeasure implements Measure {
 			
 		double X2 = 0;
 		
-		for( int i=0; i < feature1.getNumBins(); i++ ){
-			
-			for( int j=0; j < feature1.getNumBins(); j++ ){
-				
+		for( int i=0; i < feature1.getNumBins(); i++ ){			
+			for( int j=0; j < feature1.getNumBins(); j++ ){				
 				for( int k=0; k < feature1.getNumBins(); k++ ){
 					
 					double Mi = ( feature1.get(i,j,k) + feature2.get(i,j,k) ) / 2.0;
@@ -124,16 +121,13 @@ public class ChiSquaredMeasure implements Measure {
 	@Override
 	public Similarity compare(Descriptor feature1, Descriptor feature2)	throws Exception {
 		
-		if (feature1 instanceof RGBHistogramDescriptor && feature2 instanceof RGBHistogramDescriptor) {
-			
+		if (feature1 instanceof RGBHistogramDescriptor && feature2 instanceof RGBHistogramDescriptor) {			
 			return compare( (RGBHistogramDescriptor) feature1, (RGBHistogramDescriptor) feature2 );
 		}
-		else if (feature1 instanceof GrayscaleHistogramDescriptor && feature2 instanceof GrayscaleHistogramDescriptor) {
-			
+		else if (feature1 instanceof GrayscaleHistogramDescriptor && feature2 instanceof GrayscaleHistogramDescriptor) {			
 			return compare( (GrayscaleHistogramDescriptor) feature1, (GrayscaleHistogramDescriptor) feature2 );
 		}
-		else if (feature1 instanceof PixelHistogramDescriptor && feature2 instanceof PixelHistogramDescriptor) {
-			
+		else if (feature1 instanceof PixelHistogramDescriptor && feature2 instanceof PixelHistogramDescriptor) {			
 			return compare( (PixelHistogramDescriptor) feature1, (PixelHistogramDescriptor) feature2 );
 		}
 		else {

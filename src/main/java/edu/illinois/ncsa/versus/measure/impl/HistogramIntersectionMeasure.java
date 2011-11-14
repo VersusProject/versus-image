@@ -13,7 +13,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 /**
- * Histogram intersection between two color histograms.
+ * Histogram intersection for grayscale and RGB histograms.
  * 
  * @author Devin Bonnie
  * 
@@ -23,15 +23,14 @@ public class HistogramIntersectionMeasure implements Measure {
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
 		// TODO Auto-generated method stub		
-		//normalize by the number of bins, i.e., 1/n
 		return null;
 	}
 
 	/**
 	 * Compares two RGB Histograms by Histogram Intersection. 
 	 * 
-	 * @param feature1: RGBHistogramDescriptor
-	 * @param feature2: RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -44,18 +43,16 @@ public class HistogramIntersectionMeasure implements Measure {
 		}		
 		
 		int[][] normHist1 = feature1.computeNormalizedHistogram();
-		int[][] normHist2 = feature2.computeNormalizedHistogram();
-		
-		int sumR = 0;
-		int sumG = 0;
-		int sumB = 0;
+		int[][] normHist2 = feature2.computeNormalizedHistogram();		
+		int sumR          = 0;
+		int sumG          = 0;
+		int sumB          = 0;
 		
 		for (int x=0; x < normHist2.length; x++) {
 					
 			sumR += Math.min( normHist1[x][0], normHist2[x][0] );
 			sumG += Math.min( normHist1[x][1], normHist2[x][1] );
 			sumB += Math.min( normHist1[x][2], normHist2[x][2] );
-
 		}
 		return new SimilarityNumber(sumR+sumG+sumB);
 	}
@@ -63,8 +60,8 @@ public class HistogramIntersectionMeasure implements Measure {
 	/**
 	 * Compares two Grayscale Histograms by Histogram Intersection.
 	 * 
-	 * @param feature1: GrayscaleHistogramDescriptor
-	 * @param feature2: GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -78,14 +75,12 @@ public class HistogramIntersectionMeasure implements Measure {
 		
 		int[] normHist1 = feature1.computeNormalizedHistogram();
 		int[] normHist2 = feature2.computeNormalizedHistogram();		
-		
-		int sum = 0;
+		int sum         = 0;
 		
 		for (int x=0; x < normHist1.length; x++) {
 					
 			sum += Math.min( normHist1[x], normHist2[x] );
-		}
-		
+		}		
 		return new SimilarityNumber(sum);
 	}
 
