@@ -11,7 +11,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 
 /**
- * Jeffrey Divergence of two features. The image histograms are modified s.t. they satisfy the requirements of a probability mass function.  
+ * Jeffrey Divergence of two features. 
  * 
  * The Jeffrey Divergence is a (modified) form of the K-L divergence, but is a symmetric measure.
  * 

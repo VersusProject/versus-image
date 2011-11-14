@@ -11,7 +11,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 
 
 /**
- * Kullback-Leibler Divergence of two features. The image histograms are modified s.t. they satisfy the requirements of a probability mass function.  
+ * Kullback-Leibler Divergence of two features. 
  * 
  * @author Devin Bonnie
  */
