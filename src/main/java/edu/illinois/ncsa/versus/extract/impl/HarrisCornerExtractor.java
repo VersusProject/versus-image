@@ -16,7 +16,8 @@ import edu.illinois.ncsa.versus.descriptor.impl.HarrisCornerDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
- * Extract harris corners from HasPixels adapter. This is done for both RGB and grayscale images. 
+ * Extract harris corners from HasPixels adapter. This is done for both RGB and grayscale images. No thresholding is done concerning
+ * the extracted openCV Harris Corners (this can be done in the descriptor though). 
  * 
  * @author Devin Bonnie
  * 

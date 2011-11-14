@@ -39,10 +39,8 @@ public class RGBHistogramExtractor implements Extractor {
 		
 		if (adapter instanceof HasRGBPixels) {
 			
-			HasRGBPixels hasPixels = (HasRGBPixels) adapter;
-			
-			double[][][] pixels = hasPixels.getRGBPixels();
-			
+			HasRGBPixels hasPixels               = (HasRGBPixels) adapter;			
+			double[][][] pixels                  = hasPixels.getRGBPixels();			
 			RGBHistogramDescriptor histogram_rgb = new RGBHistogramDescriptor();
 
 			for (int x = 0; x < pixels.length; x++) {

@@ -61,7 +61,7 @@ public class GrayscaleHistogramDescriptor implements Feature {
 		
 		//construct the cdf
 		cdf[0]    = histogram[0];
-		min       =  cdf[0];
+		min       = cdf[0];
 		numPixels = histogram[0];
 		
 		for( int i=1; i < histogram.length; i++ ){
