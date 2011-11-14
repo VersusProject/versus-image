@@ -15,15 +15,13 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 public class RGBHistogramDescriptor implements Feature {
 
 	private final int[][] rgbHistogram;	
-	private int[][] normalizedRGBHistogram;
 
 	public RGBHistogramDescriptor() {
 		this(256);
 	}
 
 	public RGBHistogramDescriptor(int numBins) {
-		this.rgbHistogram           = new int[numBins][3];
-		this.normalizedRGBHistogram = new int[numBins][3];
+		this.rgbHistogram = new int[numBins][3];
 	}
 
 	public void add(int val, String color) throws Exception {
@@ -38,7 +36,8 @@ public class RGBHistogramDescriptor implements Feature {
 	}
 
 	/**
-	 * @return The rgb histogram. 
+	 * @return int[][]
+	 * 		The rgb histogram. 
 	 */
 	public int[][] getHistogram(){
 		return rgbHistogram;
@@ -61,7 +60,7 @@ public class RGBHistogramDescriptor implements Feature {
 	/**
 	 * Normalize the input RGB histogram.
 	 * 
-	 * @return
+	 * @return int[][]
 	 *     Normalized histogram (RGB)
 	 */   
 	public int[][] computeNormalizedHistogram(){
@@ -72,7 +71,6 @@ public class RGBHistogramDescriptor implements Feature {
 			
 			int min, numPixels;			
 			
-			//construct the red cdf
 			cdf[0][j] = rgbHistogram[0][j];
 			min       =  cdf[0][j];
 			numPixels = rgbHistogram[0][j];
@@ -123,22 +121,11 @@ public class RGBHistogramDescriptor implements Feature {
 		return rgbHistogram[x][band];
 	}
 	
-	public int getNormalized(int x, int band) {
-		return normalizedRGBHistogram[x][band];
-	}	
-	
 	public int get(int x, String color) throws Exception {
 		
 		int band = colorInputTest( color );			
 		return rgbHistogram[x][band];
 	}
-	
-	public int getNormalized(int x, String color) throws Exception {
-		
-		int band = colorInputTest( color );				
-		return normalizedRGBHistogram[x][band];
-	}
-	
 	
 	private int colorInputTest( String color ) throws Exception {
 		

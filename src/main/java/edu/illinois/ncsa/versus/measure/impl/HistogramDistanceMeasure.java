@@ -30,8 +30,8 @@ public class HistogramDistanceMeasure implements Measure {
 	/**
 	 * Compares two Pixel Histograms by Euclidean Distance.
 	 * 
-	 * @param feature1: PixelHistogramDescriptor
-	 * @param feature2: PixelHistogramDescriptor
+	 * @param PixelHistogramDescriptor
+	 * @param PixelHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -54,8 +54,8 @@ public class HistogramDistanceMeasure implements Measure {
 	/**
 	 * Compares two RGB Histograms by Euclidean Distance.
 	 * 
-	 * @param feature1: RGBHistogramDescriptor
-	 * @param feature2: RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
+	 * @param RGBHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
@@ -75,8 +75,8 @@ public class HistogramDistanceMeasure implements Measure {
 	/**
 	 * Compares two Grayscale Histograms by Euclidean Distance.
 	 * 
-	 * @param feature1: GrayscaleHistogramDescriptor
-	 * @param feature2: GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
+	 * @param GrayscaleHistogramDescriptor
 	 * @return SimilarityNumber
 	 * @throws Exception
 	 */
