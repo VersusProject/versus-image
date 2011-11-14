@@ -53,7 +53,6 @@ public class GrayscaleHistogramExtractor implements Extractor {
 						r = (int) pixels[x][y][0];
 						histogram.add(r);
 					}
-					//TODO: else throw exception
 					else{
 						throw new UnsupportedTypeException("Expected a grayscale image. Input image is otherwise.");
 					}

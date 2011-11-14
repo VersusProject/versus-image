@@ -23,6 +23,8 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  * Extract sift features from HasPixels adapter. This is done for both RGB and grayscale images. The code before the sift
  * feature extraction can be used as a general method from a buffered image to an IPLIMAGE
  * 
+ * Each SURF keypoint and descriptor pair is encapsulated in the subclass SurfPoint (from the SurfFeatureDescriptor). 
+ * 
  * @author Devin Bonnie
  * 
  * 
@@ -86,8 +88,7 @@ public class SurfFeatureExtractor implements Extractor {
 		CvSeq cvKeypoints   = new CvSeq(null);
 		CvSeq cvDescriptors = new CvSeq(null);
 		CvSURFParams params = cvSURFParams(500, 0);//default parameters		
-		cvExtractSURF( image, null, cvKeypoints, cvDescriptors, CvMemStorage.create(), params, 0);
-	
+		cvExtractSURF( image, null, cvKeypoints, cvDescriptors, CvMemStorage.create(), params, 0);	
 
 		ArrayList<SurfPoint> points = new ArrayList<SurfPoint>();
 		
