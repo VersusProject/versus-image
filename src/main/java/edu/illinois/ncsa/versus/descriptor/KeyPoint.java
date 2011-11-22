@@ -62,37 +62,89 @@ public class KeyPoint {
 		this.size             = null;
 	}
 	
+	/**
+	 * Returns x coordinate
+	 * 
+	 * @return x
+	 */
 	public double x(){
 		return x.doubleValue();
-	}		
+	}
+	/**
+	 * Returns y coordinate
+	 * 
+	 * @return y
+	 */
 	public double y(){
 		return y.doubleValue();
 	}
+	/**
+	 * returns direction (orientation)
+	 * 
+	 * @return direction
+	 */
 	public double direction(){
 		return direction.doubleValue();
 	}
+	/**
+	 * Returns Laplacian value
+	 * 
+	 * @return laplacian
+	 */
 	public double laplacian(){
 		return laplacian.doubleValue();
 	}
+	/**
+	 * Returns Hessian value
+	 * 
+	 * @return hessian
+	 */
 	public double hessian(){
 		return hessian.doubleValue();
 	}
+	/**
+	 * Returns size
+	 * 
+	 * @return size
+	 */
 	public double size(){
 		return size.doubleValue();
 	}
+	/**
+	 * Returns scale of feature.
+	 * 
+	 * @return scale
+	 */
 	public double scale(){
 		return scale.doubleValue();
 	}
+	/**
+	 * Returns the length of the 'descriptors' array
+	 * 
+	 * @return descriptorLength
+	 */
 	public int getDescriptorLength(){
 		return descriptorLength;
 	}
+	/**
+	 * Returns array of descriptors
+	 * 
+	 * @return descriptors
+	 */
 	public float[] getDescriptorArray(){
 		return descriptors;
 	}
+	/**
+	 * Returns value of descriptors at specified index. 
+	 * 
+	 * @param index
+	 * @return descriptors[index]
+	 */
 	public float getDescriptorValue(int index){
 		return descriptors[index];
 	}
 	
+	@Override
 	public String toString(){
 		
 		String s = new String();
@@ -128,4 +180,62 @@ public class KeyPoint {
 		return s;
 	}
 	
+	/**
+	 * Set x coordinate
+	 * @param input
+	 */
+	public void setX(double input){
+		x = new Double(input);		
+	}
+	/**
+	 * Set y coordinate
+	 * @param input
+	 */
+	public void setY(double input){
+		y = new Double(input);	
+	}
+	/**
+	 * Set direction
+	 * @param input
+	 */
+	public void setDirection(double input){
+		direction = new Double(input);	
+	}
+	/**
+	 * Set Laplacian
+	 * @param input
+	 */
+	public void setLaplacian(double input){
+		laplacian = new Double(input);	
+	}
+	/**
+	 * Set Hessian
+	 * @param input
+	 */
+	public void setHessian(double input){
+		hessian = new Double(input);	
+	}
+	/**
+	 * Set size
+	 * @param input
+	 */
+	public void setSize(double input){
+		size = new Double(input);	
+	}
+	/**
+	 * Set scale
+	 * @param input
+	 */
+	public void setScale(double input){
+		scale = new Double(input);	
+	}
+	/**
+	 * Set descriptors (and descriptorLength)
+	 * @param input
+	 */
+	public void setDescriptors(float[] input){
+		descriptors      = input;
+		descriptorLength = input.length;
+	}
+
 }
