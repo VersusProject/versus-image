@@ -20,6 +20,22 @@ public class KeyPoint {
 	private float[] descriptors;
 	private int descriptorLength;
 	
+	
+	/**
+	 * Empty Constructor, use this if you can fill out relevant class members. 
+	 */
+	public KeyPoint(){
+		this.x                = null;
+		this.y                = null;
+		this.direction        = null;
+		this.laplacian        = null;
+		this.hessian          = null;
+		this.size             = null;
+		this.scale            = null;
+		this.descriptors      = null;			
+		this.descriptorLength = 0;
+	}	
+	
 	/**
 	 * Constructor given OpenCV SURF information. 
 	 * 
