@@ -78,4 +78,9 @@ public class RGBHistogramExtractor implements Extractor {
 	public Class<? extends Descriptor> getFeatureType() {
 		return RGBHistogramDescriptor.class;
 	}
+	
+	@Override
+	public boolean hasPreview(){
+		return false;
+	}
 }

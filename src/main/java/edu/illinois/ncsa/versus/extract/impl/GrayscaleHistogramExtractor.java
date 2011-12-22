@@ -76,4 +76,9 @@ public class GrayscaleHistogramExtractor implements Extractor {
 	public Class<? extends Descriptor> getFeatureType() {
 		return GrayscaleHistogramDescriptor.class;
 	}
+	
+	@Override
+	public boolean hasPreview(){
+		return false;
+	}
 }

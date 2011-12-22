@@ -84,4 +84,9 @@ public class ColorAverageVectorFeatureExtractor implements Extractor {
 	public Class<? extends Descriptor> getFeatureType() {
 		return ColorLayoutFeature.class;
 	}
+	
+	@Override
+	public boolean hasPreview(){
+		return false;
+	}
 }

@@ -81,4 +81,9 @@ public class PixelHistogramExtractor implements Extractor {
 	public Class<? extends Descriptor> getFeatureType() {
 		return PixelHistogramDescriptor.class;
 	}
+	
+	@Override
+	public boolean hasPreview(){
+		return false;
+	}
 }
