@@ -55,5 +55,10 @@ public class ArrayFeatureExtractor implements Extractor {
 	public Class<? extends Descriptor> getFeatureType() {
 		return ThreeDimensionalDoubleArrayFeature.class;
 	}
+	
+	@Override
+	public boolean hasPreview(){
+		return false;
+	}
 
 }
