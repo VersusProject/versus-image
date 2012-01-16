@@ -89,4 +89,9 @@ public class ColorAverageVectorFeatureExtractor implements Extractor {
 	public boolean hasPreview(){
 		return false;
 	}
+	
+	@Override
+	public String previewName(){
+		return null;
+	}
 }
