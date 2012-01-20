@@ -81,11 +81,11 @@ public class RGBHistogramExtractor implements Extractor {
 	
 	@Override
 	public boolean hasPreview(){
-		return false;
+		return true;
 	}
 	
 	@Override
 	public String previewName(){
-		return null;
+		return "HistogramVisualizer";
 	}
 }
