@@ -12,6 +12,8 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Euclidean distance between two pixel histograms.
@@ -92,8 +94,12 @@ public class HistogramDistanceMeasure implements Measure {
 	}
 	
 	@Override
-	public String getFeatureType() {
-		return PixelHistogramDescriptor.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(3);
+        featuresTypes.add(PixelHistogramDescriptor.class);
+        featuresTypes.add(RGBHistogramDescriptor.class);
+        featuresTypes.add(GrayscaleHistogramDescriptor.class);
+        return featuresTypes;
 	}
 
 	@Override

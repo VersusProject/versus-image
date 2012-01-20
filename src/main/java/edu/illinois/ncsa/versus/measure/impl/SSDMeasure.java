@@ -7,6 +7,8 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Sum of squared differences.
@@ -86,9 +88,11 @@ public class SSDMeasure implements Measure
 	}
 
 	@Override
-	public String getFeatureType()
-	{
-		return ThreeDimensionalDoubleArrayFeature.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(2);
+        featuresTypes.add(DoubleArrayFeature.class);
+        featuresTypes.add(ThreeDimensionalDoubleArrayFeature.class);
+        return featuresTypes;
 	}
 
 	@Override
