@@ -4,6 +4,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.category.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -20,7 +21,7 @@ import java.util.Set;
  * @author Devin Bonnie
  * 
  */
-public class WaveHedgesDistanceMeasure implements Measure {
+public class WaveHedgesDistanceMeasure implements Measure, HasCategory {
 
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
@@ -120,5 +121,10 @@ public class WaveHedgesDistanceMeasure implements Measure {
 	public Class<WaveHedgesDistanceMeasure> getType() {
 		return WaveHedgesDistanceMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Intersection family";
+    }
 
 }

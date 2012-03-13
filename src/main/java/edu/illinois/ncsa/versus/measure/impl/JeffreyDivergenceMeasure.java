@@ -1,6 +1,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.category.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -19,7 +20,7 @@ import java.util.Set;
  * 
  * @author Devin Bonnie
  */
-public class JeffreyDivergenceMeasure implements Measure {
+public class JeffreyDivergenceMeasure implements Measure, HasCategory {
 	
 	/**
 	 * Compares two RGB Histograms using the Jeffrey divergence i.e., d_KL( A, B )
@@ -144,4 +145,9 @@ public class JeffreyDivergenceMeasure implements Measure {
 	public Class<JeffreyDivergenceMeasure> getType() {
 		return JeffreyDivergenceMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Shannon's entropy family";
+    }
 }

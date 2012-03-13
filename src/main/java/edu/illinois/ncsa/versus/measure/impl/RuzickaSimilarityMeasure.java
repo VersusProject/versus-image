@@ -4,6 +4,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.category.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -20,7 +21,7 @@ import java.util.Set;
  * @author Devin Bonnie
  * 
  */
-public class RuzickaSimilarityMeasure implements Measure {
+public class RuzickaSimilarityMeasure implements Measure, HasCategory {
 
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
@@ -121,5 +122,10 @@ public class RuzickaSimilarityMeasure implements Measure {
 	public Class<RuzickaSimilarityMeasure> getType() {
 		return RuzickaSimilarityMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Intersection family";
+    }
 
 }
