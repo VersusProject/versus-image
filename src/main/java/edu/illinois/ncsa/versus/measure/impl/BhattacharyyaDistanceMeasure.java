@@ -4,7 +4,6 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
-import edu.illinois.ncsa.versus.category.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -14,6 +13,8 @@ import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
 import java.util.HashSet;
 import java.util.Set;
+
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * Bhattacharyya Distance of two histograms. Only works with normalized histograms and does not work well for sparse histograms.  
