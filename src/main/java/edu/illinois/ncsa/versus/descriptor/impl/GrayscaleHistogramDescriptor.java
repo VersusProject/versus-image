@@ -20,7 +20,7 @@ public class GrayscaleHistogramDescriptor implements Feature {
 	}
 
 	public GrayscaleHistogramDescriptor(int numBins) {
-		this.histogram           = new int[numBins];
+		this.histogram = new int[numBins];
 	}
 
 	public void add(int val) {
