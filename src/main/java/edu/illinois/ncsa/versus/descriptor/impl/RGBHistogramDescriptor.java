@@ -96,7 +96,7 @@ public class RGBHistogramDescriptor implements Feature {
 	
 	@Override
 	public String getName() {
-		return "RGB Histogram";
+		return "RGBHistogramDescriptor";
 	}
 
 	@Override

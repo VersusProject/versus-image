@@ -73,7 +73,7 @@ public class PixelHistogramExtractor implements Extractor {
 	@Override
 	public Set<Class<? extends Adapter>> supportedAdapters() {
 		Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
-		adapters.add(HasPixels.class);
+		adapters.add(HasRGBPixels.class);
 		return adapters;
 	}
 
