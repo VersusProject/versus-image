@@ -3,6 +3,8 @@
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +38,7 @@ public class GrayscaleHistogramExtractor implements Extractor {
 
 	@Override
 	public Descriptor extract(Adapter adapter) throws Exception {
+	
 		
 		if (adapter instanceof HasRGBPixels) {
 			
@@ -68,7 +71,7 @@ public class GrayscaleHistogramExtractor implements Extractor {
 	@Override
 	public Set<Class<? extends Adapter>> supportedAdapters() {
 		Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
-		adapters.add(HasPixels.class);
+		adapters.add(HasRGBPixels.class);
 		return adapters;
 	}
 

@@ -3,6 +3,8 @@
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
+import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
 
@@ -70,7 +73,7 @@ public class RGBHistogramExtractor implements Extractor {
 	@Override
 	public Set<Class<? extends Adapter>> supportedAdapters() {
 		Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
-		adapters.add(HasPixels.class);
+		adapters.add(BufferedImageAdapter.class);
 		return adapters;
 	}
 
