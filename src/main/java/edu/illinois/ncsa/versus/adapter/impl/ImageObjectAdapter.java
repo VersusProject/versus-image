@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.illinois.ncsa.versus.adapter.impl;
 
@@ -14,103 +14,132 @@ import ncsa.im2learn.core.io.ImageLoader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.FileLoader;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
 
 /**
  * Simple adapter encapsulating Im2Learn ImageObject.
- * 
+ *
  * @author Luigi Marini
- * 
+ *
  */
 public class ImageObjectAdapter implements HasPixels, FileLoader {
 
-	/** Im2Learn image object **/
-	private ImageObject imageObject;
+    /**
+     * Im2Learn image object *
+     */
+    private ImageObject imageObject;
 
-	/** Commons logging **/
-	private static Log log = LogFactory.getLog(ImageObjectAdapter.class);
+    /**
+     * Commons logging *
+     */
+    private static Log log = LogFactory.getLog(ImageObjectAdapter.class);
 
-	/**
-	 * Wrap an Im2Learn ImageObject.
-	 * 
-	 * @param imageObject
-	 */
-	public ImageObjectAdapter(ImageObject imageObject) {
-		this.imageObject = imageObject;
-	}
+    /**
+     * Wrap an Im2Learn ImageObject.
+     *
+     * @param imageObject
+     */
+    public ImageObjectAdapter(ImageObject imageObject) {
+        this.imageObject = imageObject;
+    }
 
-	/**
-	 * Create an empty instance of the adapter.
-	 */
-	public ImageObjectAdapter() {
-	}
+    /**
+     * Create an empty instance of the adapter.
+     */
+    public ImageObjectAdapter() {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see edu.illinois.ncsa.compare.extract.PixelExtractor#getPixels()
-	 */
-	@Override
-	public double[][][] getRGBPixels() {
+    /*
+     * (non-Javadoc)
+     *
+     * @see edu.illinois.ncsa.compare.extract.PixelExtractor#getPixels()
+     */
+    @Override
+    public double[][][] getRGBPixels() {
 
-		int numBands = imageObject.getNumBands();
-		int numRows = imageObject.getNumRows();
-		int numCols = imageObject.getNumCols();
+        int numBands = imageObject.getNumBands();
+        int numRows = imageObject.getNumRows();
+        int numCols = imageObject.getNumCols();
 
-		double[][][] pixels = new double[numRows][numCols][numBands];
+        double[][][] pixels = new double[numRows][numCols][numBands];
 
-		for (int band = 0; band < numBands; band++) {
-			for (int row = 0; row < numRows; row++) {
-				for (int col = 0; col < numCols; col++) {
-					pixels[row][col][band] = imageObject.getDouble(row, col,
-							band);
-				}
-			}
-		}
-		return pixels;
-	}
+        for (int band = 0; band < numBands; band++) {
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numCols; col++) {
+                    pixels[row][col][band] = imageObject.getDouble(row, col,
+                            band);
+                }
+            }
+        }
+        return pixels;
+    }
 
-	/**
-	 * Get Im2learn image object.
-	 * 
-	 * @return image object
-	 */
-	public ImageObject getImageObject() {
-		return imageObject;
-	}
+    @Override
+    public int getBitsPerPixel() {
+        int type = imageObject.getType();
+        int numBands = imageObject.getNumBands();
+        switch (type) {
+            case ImageObject.TYPE_BYTE:
+                return 8 * numBands;
+            case ImageObject.TYPE_SHORT:
+                return 16 * numBands;
+            case ImageObject.TYPE_USHORT:
+                return 16 * numBands;
+            case ImageObject.TYPE_INT:
+                return 32 * numBands;
+            case ImageObject.TYPE_LONG:
+                return 64 * numBands;
+            case ImageObject.TYPE_FLOAT:
+                return 32 * numBands;
+            case ImageObject.TYPE_DOUBLE:
+                return 64 * numBands;
+            default:
+                throw new RuntimeException("Cannot get bits per pixel of image object type " + type);
+        }
+    }
 
-	@Override
-	public void load(File file) throws IOException {
-		imageObject = ImageLoader.readImage(file.getAbsolutePath());
-	}
+    /**
+     * Get Im2learn image object.
+     *
+     * @return image object
+     */
+    public ImageObject getImageObject() {
+        return imageObject;
+    }
 
-	@Override
-	public double getRGBPixel(int row, int column, int band) {
-		return imageObject.getDouble(row, column, band);
-	}
+    @Override
+    public void load(File file) throws IOException {
+        imageObject = ImageLoader.readImage(file.getAbsolutePath());
+    }
 
-	@Override
-	public String getName() {
-		return "Image Object";
-	}
+    @Override
+    public double getRGBPixel(int row, int column, int band) {
+        return imageObject.getDouble(row, column, band);
+    }
 
-	@Override
-	public double getHSVPixel(int row, int column, int band) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public String getName() {
+        return "Image Object";
+    }
 
-	@Override
-	public double[][][] getHSVPixels() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public double getHSVPixel(int row, int column, int band) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public List<String> getSupportedMediaTypes() {
-		List<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add("image/*");
-		return mediaTypes;
-	}
+    @Override
+    public double[][][] getHSVPixels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> getSupportedMediaTypes() {
+        List<String> mediaTypes = new ArrayList<String>();
+        mediaTypes.add("image/*");
+        return mediaTypes;
+    }
 }

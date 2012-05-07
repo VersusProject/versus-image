@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
@@ -19,74 +19,80 @@ import edu.illinois.ncsa.versus.extract.Extractor;
 
 /**
  * Extract Grayscale image from HasPixels adapter.
- * 
+ *
  * @author Luigi Marini, Devin Bonnie
- * 
- * 
+ *
+ *
  */
 public class GrayscaleHistogramExtractor implements Extractor {
 
-	@Override
-	public BufferedImageAdapter newAdapter() {
-		return new BufferedImageAdapter();
-	}
+    @Override
+    public BufferedImageAdapter newAdapter() {
+        return new BufferedImageAdapter();
+    }
 
-	@Override
-	public String getName() {
-		return "Pixels to Grayscale Histogram";
-	}
+    @Override
+    public String getName() {
+        return "Pixels to Grayscale Histogram";
+    }
 
-	@Override
-	public Descriptor extract(Adapter adapter) throws Exception {
-	
-		
-		if (adapter instanceof HasRGBPixels) {
-			
-			HasRGBPixels hasPixels = (HasRGBPixels) adapter;
-			
-			double[][][] pixels = hasPixels.getRGBPixels();
-			
-			GrayscaleHistogramDescriptor histogram = new GrayscaleHistogramDescriptor();
+    @Override
+    public Descriptor extract(Adapter adapter) throws Exception {
 
-			for (int x = 0; x < pixels.length; x++) {
-				for (int y = 0; y < pixels[0].length; y++) {
-					
-					int r;
-					if (pixels[x][y].length == 1) {
-						r = (int) pixels[x][y][0];
-						histogram.add(r);
-					}
-					else{
-						throw new UnsupportedTypeException("Expected a grayscale image. Input image is otherwise.");
-					}
-				}
-			}
-			return histogram;
-		} 
-		else {
-			throw new UnsupportedTypeException();
-		}
-	}
 
-	@Override
-	public Set<Class<? extends Adapter>> supportedAdapters() {
-		Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
-		adapters.add(HasRGBPixels.class);
-		return adapters;
-	}
+        if (adapter instanceof HasRGBPixels) {
 
-	@Override
-	public Class<? extends Descriptor> getFeatureType() {
-		return GrayscaleHistogramDescriptor.class;
-	}
-	
-	@Override
-	public boolean hasPreview(){
-		return true;
-	}
-	
-	@Override
-	public String previewName(){
-		return "HistogramVisualizer";
-	}
+            HasRGBPixels hasPixels = (HasRGBPixels) adapter;
+
+            double[][][] pixels = hasPixels.getRGBPixels();
+            int bitsPerPixel = hasPixels.getBitsPerPixel();
+            if (bitsPerPixel >= 32) {
+                throw new UnsupportedOperationException(
+                        "The color depth of the image (" + bitsPerPixel
+                        + " bits per pixel) is too big.");
+            }
+
+            int numBins = 1 << bitsPerPixel;
+
+            GrayscaleHistogramDescriptor histogram = new GrayscaleHistogramDescriptor(numBins);
+
+            for (int x = 0; x < pixels.length; x++) {
+                for (int y = 0; y < pixels[0].length; y++) {
+
+                    int r;
+                    if (pixels[x][y].length == 1) {
+                        r = (int) pixels[x][y][0];
+                        histogram.add(r);
+                    } else {
+                        throw new UnsupportedTypeException("Expected a grayscale image. Input image is otherwise.");
+                    }
+                }
+            }
+            return histogram;
+        } else {
+            throw new UnsupportedTypeException();
+        }
+    }
+
+    @Override
+    public Set<Class<? extends Adapter>> supportedAdapters() {
+        Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
+        adapters.add(HasRGBPixels.class);
+        return adapters;
+    }
+
+    @Override
+    public Class<? extends Descriptor> getFeatureType() {
+        return GrayscaleHistogramDescriptor.class;
+    }
+
+    @Override
+    public boolean hasPreview() {
+        return true;
+    }
+
+    @Override
+    public String previewName() {
+        return "HistogramVisualizer";
+    }
 }

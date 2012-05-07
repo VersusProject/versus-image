@@ -97,6 +97,11 @@ public class BufferedImageAdapter implements HasPixels, FileLoader {
 		WritableRaster raster = image.getRaster();
 		return raster.getSampleDouble(column, row, band);
 	}
+    
+    @Override
+    public int getBitsPerPixel() {
+        return image.getColorModel().getPixelSize();
+    }
 
 	@Override
 	public String getName() {
