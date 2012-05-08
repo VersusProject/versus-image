@@ -17,23 +17,19 @@ public class PixelHistogramDescriptor implements Feature {
 
 	private final int[][][] histogram;
 	
-	//private final int[][][] normalizedHistogram;
-
+    private final int intervalSize;
+    
 	public PixelHistogramDescriptor() {
-		this(16);
-		//TODO: should be changed to 256, the measures can deal with binning issues. 
+		this(16, 256);
 	}
 
-	public PixelHistogramDescriptor(int numBins) {
+	public PixelHistogramDescriptor(int numBins, int maxPixelValue) {
 		this.numBins   = numBins;
 		this.histogram = new int[numBins][numBins][numBins];
-		
-		//this.normalizedHistogram = getNormalizedHistogram( this.histogram );
-		
+		this.intervalSize = maxPixelValue / numBins;		
 	}
 
 	public void add(int r, int g, int b) {
-		int intervalSize = 256 / numBins;
 		int x = r / intervalSize;
 		int y = g / intervalSize;
 		int z = b / intervalSize;
