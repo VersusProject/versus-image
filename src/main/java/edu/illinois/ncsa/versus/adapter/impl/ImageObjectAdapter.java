@@ -4,19 +4,24 @@
 package edu.illinois.ncsa.versus.adapter.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ncsa.im2learn.core.datatype.ImageObject;
-import ncsa.im2learn.core.io.ImageLoader;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.VersusException;
 import edu.illinois.ncsa.versus.adapter.FileLoader;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
+import edu.illinois.ncsa.versus.adapter.StreamLoader;
+import ncsa.im2learn.core.datatype.ImageObject;
+import ncsa.im2learn.core.io.ImageLoader;
 
 /**
  * Simple adapter encapsulating Im2Learn ImageObject.
@@ -24,7 +29,7 @@ import edu.illinois.ncsa.versus.adapter.HasPixels;
  * @author Luigi Marini
  *
  */
-public class ImageObjectAdapter implements HasPixels, FileLoader {
+public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader {
 
     /**
      * Im2Learn image object *
@@ -112,6 +117,24 @@ public class ImageObjectAdapter implements HasPixels, FileLoader {
     @Override
     public void load(File file) throws IOException {
         imageObject = ImageLoader.readImage(file.getAbsolutePath());
+    }
+
+    @Override
+    public void load(InputStream stream) throws IOException, VersusException {
+        File file = File.createTempFile("ImageObjectAdapterInput", ".tmp");
+        FileOutputStream fos = new FileOutputStream(file);
+        try {
+            IOUtils.copy(stream, fos);
+        } finally {
+            fos.close();
+            stream.close();
+        }
+        load(file);
+        try {
+            file.delete();
+        } catch (Exception e) {
+            Logger.getLogger(ImageObjectAdapter.class.getName()).log(Level.WARNING, "Cannot delete temp file " + file, e);
+        }
     }
 
     @Override
