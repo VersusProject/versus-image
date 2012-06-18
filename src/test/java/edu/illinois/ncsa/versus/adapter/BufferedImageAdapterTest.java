@@ -6,6 +6,7 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 
 public class BufferedImageAdapterTest {
@@ -27,7 +28,7 @@ public class BufferedImageAdapterTest {
 
         try {
             adapter.load(new File("data/test_1.jpg"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Faild loading file");
         }
@@ -51,49 +52,49 @@ public class BufferedImageAdapterTest {
 
         try {
             adapter.load(file);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Faild loading file");
         }
     }
 
     @Test
-    public void testLoadRGB8BitPng() throws IOException {
+    public void testLoadRGB8BitPng() throws IOException, UnsupportedTypeException {
         loadImage("data/color8bit.png", 8);
     }
     
     @Test
-    public void testLoadRGB24BitPng() throws IOException {
+    public void testLoadRGB24BitPng() throws IOException, UnsupportedTypeException {
         loadImage("data/color24bit.png", 24);
     }
 
     @Test
-    public void testLoadGrayscale8BitJpg() throws IOException {
+    public void testLoadGrayscale8BitJpg() throws IOException, UnsupportedTypeException {
         loadImage("data/grayscale8bit.jpg", 8);
     }
 
     @Test
-    public void testLoadGrayscale8BitPng() throws IOException {
+    public void testLoadGrayscale8BitPng() throws IOException, UnsupportedTypeException {
         loadImage("data/grayscale8bit.png", 8);
     }
 
     @Test
-    public void testLoadGrayscale8BitTif() throws IOException {
+    public void testLoadGrayscale8BitTif() throws IOException, UnsupportedTypeException {
         loadImage("data/grayscale8bit.tif", 8);
     }
 
     @Test
-    public void testLoadGrayscale16BitPng() throws IOException {
+    public void testLoadGrayscale16BitPng() throws IOException, UnsupportedTypeException {
         loadImage("data/grayscale16bit.png", 16);
     }
 
     @Test
-    public void testLoadGrayscale16BitTif() throws IOException {
+    public void testLoadGrayscale16BitTif() throws IOException, UnsupportedTypeException {
         loadImage("data/grayscale16bit.tif", 16);
     }
 
     @Test
-    public void testLoadGrayscale32BitTif() throws IOException {
+    public void testLoadGrayscale32BitTif() throws IOException, UnsupportedTypeException {
         try {
             loadImage("data/grayscale32bit.tif", 32);
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -101,7 +102,7 @@ public class BufferedImageAdapterTest {
         }
     }
 
-    private void loadImage(String image, int bitPerPixel) throws IOException {
+    private void loadImage(String image, int bitPerPixel) throws IOException, UnsupportedTypeException {
         BufferedImageAdapter adapter = new BufferedImageAdapter();
         adapter.load(new File(image));
         assertEquals(bitPerPixel, adapter.getBitsPerPixel());
