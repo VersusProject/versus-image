@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
@@ -13,57 +13,62 @@ import edu.illinois.ncsa.versus.adapter.impl.ImageObjectAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.ThreeDimensionalDoubleArrayFeature;
 import edu.illinois.ncsa.versus.extract.Extractor;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * @author Luigi Marini
- * 
+ *
  */
-public class ArrayFeatureExtractor implements Extractor {
+public class ArrayFeatureExtractor implements Extractor, HasCategory {
 
-	private ThreeDimensionalDoubleArrayFeature extract(HasPixels adapter) {
-		return new ThreeDimensionalDoubleArrayFeature(adapter.getRGBPixels());
-	}
+    private ThreeDimensionalDoubleArrayFeature extract(HasPixels adapter) {
+        return new ThreeDimensionalDoubleArrayFeature(adapter.getRGBPixels());
+    }
 
-	@Override
-	public ImageObjectAdapter newAdapter() {
-		return new ImageObjectAdapter();
-	}
+    @Override
+    public ImageObjectAdapter newAdapter() {
+        return new ImageObjectAdapter();
+    }
 
-	@Override
-	public String getName() {
-		return "Pixels to Array";
-	}
+    @Override
+    public String getName() {
+        return "Pixels to Array";
+    }
 
-	@Override
-	public Descriptor extract(Adapter adapter) throws UnsupportedTypeException {
-		if (adapter instanceof HasPixels) {
-			HasPixels hasPixels = (HasPixels) adapter;
-			return extract(hasPixels);
-		} else {
-			throw new UnsupportedTypeException();
-		}
-	}
+    @Override
+    public Descriptor extract(Adapter adapter) throws UnsupportedTypeException {
+        if (adapter instanceof HasPixels) {
+            HasPixels hasPixels = (HasPixels) adapter;
+            return extract(hasPixels);
+        } else {
+            throw new UnsupportedTypeException();
+        }
+    }
 
-	@Override
-	public Set<Class<? extends Adapter>> supportedAdapters() {
-		Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
-		adapters.add(HasPixels.class);
-		return adapters;
-	}
+    @Override
+    public Set<Class<? extends Adapter>> supportedAdapters() {
+        Set<Class<? extends Adapter>> adapters = new HashSet<Class<? extends Adapter>>();
+        adapters.add(HasPixels.class);
+        return adapters;
+    }
 
-	@Override
-	public Class<? extends Descriptor> getFeatureType() {
-		return ThreeDimensionalDoubleArrayFeature.class;
-	}
-	
-	@Override
-	public boolean hasPreview(){
-		return false;
-	}
-	
-	@Override
-	public String previewName(){
-		return null;
-	}
+    @Override
+    public Class<? extends Descriptor> getFeatureType() {
+        return ThreeDimensionalDoubleArrayFeature.class;
+    }
 
+    @Override
+    public boolean hasPreview() {
+        return false;
+    }
+
+    @Override
+    public String previewName() {
+        return null;
+    }
+
+    @Override
+    public String getCategory() {
+        return "2D";
+    }
 }

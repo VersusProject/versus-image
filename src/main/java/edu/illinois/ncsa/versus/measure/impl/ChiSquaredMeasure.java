@@ -165,6 +165,6 @@ public class ChiSquaredMeasure implements Measure, HasCategory {
 
     @Override
     public String getCategory() {
-        return "Squared L2 family or X2 family";
+        return "Squared L2 family or Chi squared family";
     }
 }

@@ -3,19 +3,17 @@
  */
 package edu.illinois.ncsa.versus.extract.impl;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.Adapter;
-import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.HasRGBPixels;
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * Extract Grayscale image from HasPixels adapter.
@@ -24,7 +22,7 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  *
  *
  */
-public class GrayscaleHistogramExtractor implements Extractor {
+public class GrayscaleHistogramExtractor implements Extractor, HasCategory {
 
     @Override
     public BufferedImageAdapter newAdapter() {
@@ -94,5 +92,10 @@ public class GrayscaleHistogramExtractor implements Extractor {
     @Override
     public String previewName() {
         return "HistogramVisualizer";
+    }
+
+    @Override
+    public String getCategory() {
+        return "2D";
     }
 }

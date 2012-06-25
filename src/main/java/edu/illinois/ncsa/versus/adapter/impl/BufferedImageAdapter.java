@@ -18,6 +18,7 @@ import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.adapter.FileLoader;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.StreamLoader;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 import javax.imageio.ImageIO;
 
 /**
@@ -26,7 +27,7 @@ import javax.imageio.ImageIO;
  * @author Luigi Marini
  *
  */
-public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader {
+public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader, HasCategory {
 
     /**
      * Buffered image *
@@ -141,5 +142,10 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
         List<String> mediaTypes = new ArrayList<String>();
         mediaTypes.add("image/*");
         return mediaTypes;
+    }
+
+    @Override
+    public String getCategory() {
+        return "2D";
     }
 }

@@ -20,6 +20,7 @@ import edu.illinois.ncsa.versus.VersusException;
 import edu.illinois.ncsa.versus.adapter.FileLoader;
 import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.adapter.StreamLoader;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 import ncsa.im2learn.core.datatype.ImageObject;
 import ncsa.im2learn.core.io.ImageLoader;
 
@@ -29,7 +30,7 @@ import ncsa.im2learn.core.io.ImageLoader;
  * @author Luigi Marini
  *
  */
-public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader {
+public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader, HasCategory {
 
     /**
      * Im2Learn image object *
@@ -164,5 +165,10 @@ public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader {
         List<String> mediaTypes = new ArrayList<String>();
         mediaTypes.add("image/*");
         return mediaTypes;
+    }
+
+    @Override
+    public String getCategory() {
+        return "2D";
     }
 }

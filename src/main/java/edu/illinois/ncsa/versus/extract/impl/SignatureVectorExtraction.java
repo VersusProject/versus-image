@@ -13,6 +13,7 @@ import edu.illinois.ncsa.versus.adapter.HasPixels;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.ColorLayoutFeature;
 import edu.illinois.ncsa.versus.extract.Extractor;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * Create a {@linkplain ColorLayoutFeature} from a object that has pixels and
@@ -21,7 +22,7 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  * @author Luigi Marini
  * 
  */
-public class SignatureVectorExtraction implements Extractor {
+public class SignatureVectorExtraction implements Extractor, HasCategory {
 
 	@Override
 	public HasPixels newAdapter() {
@@ -75,4 +76,9 @@ public class SignatureVectorExtraction implements Extractor {
 	public String previewName(){
 		return null;
 	}
+
+    @Override
+    public String getCategory() {
+        return "2D";
+    }
 }

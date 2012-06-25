@@ -13,6 +13,7 @@ import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.PixelHistogramDescriptor;
 import edu.illinois.ncsa.versus.extract.Extractor;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * Extract RGB image from HasPixels adapter.
@@ -21,7 +22,7 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  *
  *
  */
-public class PixelHistogramExtractor implements Extractor {
+public class PixelHistogramExtractor implements Extractor, HasCategory {
 
     @Override
     public BufferedImageAdapter newAdapter() {
@@ -93,5 +94,10 @@ public class PixelHistogramExtractor implements Extractor {
     @Override
     public String previewName() {
         return null;
+    }
+
+    @Override
+    public String getCategory() {
+        return "2D";
     }
 }
