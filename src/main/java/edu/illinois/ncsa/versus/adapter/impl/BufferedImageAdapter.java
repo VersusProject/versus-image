@@ -96,16 +96,20 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
     @Override
     public void load(File file) throws IOException, UnsupportedTypeException {
         image = ImageIO.read(file);
-        if(image == null) {
+        if (image == null) {
             throw new UnsupportedTypeException("No image reader can decode this file.");
         }
     }
 
     @Override
     public void load(InputStream stream) throws IOException, UnsupportedTypeException {
-        image = ImageIO.read(stream);
-        if(image == null) {
-            throw new UnsupportedTypeException("No image reader can decode this file.");
+        try {
+            image = ImageIO.read(stream);
+            if (image == null) {
+                throw new UnsupportedTypeException("No image reader can decode this file.");
+            }
+        } finally {
+            stream.close();
         }
     }
 
