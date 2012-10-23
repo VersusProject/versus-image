@@ -1,6 +1,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -8,6 +9,8 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -15,7 +18,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
  * 
  * @author Devin Bonnie
  */
-public class KLdivergenceMeasure implements Measure {
+public class KLdivergenceMeasure implements Measure, HasCategory {
 	
 	/**
 	 * Compares two RGB Histograms using the KL divergence i.e., d_KL( A, B )
@@ -114,8 +117,11 @@ public class KLdivergenceMeasure implements Measure {
 	}
 	
 	@Override
-	public String getFeatureType() {
-		return RGBHistogramDescriptor.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(2);
+        featuresTypes.add(RGBHistogramDescriptor.class);
+        featuresTypes.add(GrayscaleHistogramDescriptor.class);
+        return featuresTypes;
 	}
 	
 	
@@ -135,4 +141,9 @@ public class KLdivergenceMeasure implements Measure {
 	public Class<KLdivergenceMeasure> getType() {
 		return KLdivergenceMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Shannon's entropy family";
+    }
 }

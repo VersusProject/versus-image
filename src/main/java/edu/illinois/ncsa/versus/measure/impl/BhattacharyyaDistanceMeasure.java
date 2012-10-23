@@ -11,6 +11,10 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
+
+import edu.illinois.ncsa.versus.utility.HasCategory;
 
 /**
  * Bhattacharyya Distance of two histograms. Only works with normalized histograms and does not work well for sparse histograms.  
@@ -18,7 +22,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
  * @author Devin Bonnie
  * 
  */
-public class BhattacharyyaDistanceMeasure implements Measure {
+public class BhattacharyyaDistanceMeasure implements Measure, HasCategory {
 
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
@@ -87,8 +91,11 @@ public class BhattacharyyaDistanceMeasure implements Measure {
 	}
 	
 	@Override
-	public String getFeatureType() {
-		return RGBHistogramDescriptor.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(2);
+        featuresTypes.add(RGBHistogramDescriptor.class);
+        featuresTypes.add(GrayscaleHistogramDescriptor.class);
+        return featuresTypes;
 	}
 
 	@Override
@@ -118,5 +125,10 @@ public class BhattacharyyaDistanceMeasure implements Measure {
 	public Class<BhattacharyyaDistanceMeasure> getType() {
 		return BhattacharyyaDistanceMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Fidelity family or Squared-chord family";
+    }
 
 }

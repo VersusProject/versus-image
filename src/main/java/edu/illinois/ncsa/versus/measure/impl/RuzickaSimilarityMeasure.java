@@ -4,6 +4,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -11,6 +12,8 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Ruzicka Measure (histogram intersection family) between two histograms.
@@ -18,7 +21,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
  * @author Devin Bonnie
  * 
  */
-public class RuzickaSimilarityMeasure implements Measure {
+public class RuzickaSimilarityMeasure implements Measure, HasCategory {
 
 	@Override
 	public SimilarityPercentage normalize(Similarity similarity) {
@@ -89,8 +92,11 @@ public class RuzickaSimilarityMeasure implements Measure {
 	}
 
 	@Override
-	public String getFeatureType() {
-		return RGBHistogramDescriptor.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(2);
+        featuresTypes.add(RGBHistogramDescriptor.class);
+        featuresTypes.add(GrayscaleHistogramDescriptor.class);
+        return featuresTypes;
 	}
 
 	@Override
@@ -116,5 +122,10 @@ public class RuzickaSimilarityMeasure implements Measure {
 	public Class<RuzickaSimilarityMeasure> getType() {
 		return RuzickaSimilarityMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Intersection family";
+    }
 
 }

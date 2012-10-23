@@ -1,6 +1,7 @@
 package edu.illinois.ncsa.versus.measure.impl;
 
 import edu.illinois.ncsa.versus.UnsupportedTypeException;
+import edu.illinois.ncsa.versus.utility.HasCategory;
 import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.RGBHistogramDescriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
@@ -9,6 +10,8 @@ import edu.illinois.ncsa.versus.measure.Measure;
 import edu.illinois.ncsa.versus.measure.Similarity;
 import edu.illinois.ncsa.versus.measure.SimilarityNumber;
 import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -16,7 +19,7 @@ import edu.illinois.ncsa.versus.measure.SimilarityPercentage;
  * 
  * @author Devin Bonnie
  */
-public class ChiSquaredMeasure implements Measure {
+public class ChiSquaredMeasure implements Measure, HasCategory {
 	
 	/**
 	 * Compares two normalized RGB Histograms using the Chi-Squared metric, i.e., X^2( A, B )
@@ -136,8 +139,12 @@ public class ChiSquaredMeasure implements Measure {
 	}
 	
 	@Override
-	public String getFeatureType() {
-		return RGBHistogramDescriptor.class.getName();
+	public Set<Class<? extends Descriptor>> supportedFeaturesTypes() {
+        Set<Class<? extends Descriptor>> featuresTypes = new HashSet<Class<? extends Descriptor>>(3);
+        featuresTypes.add(RGBHistogramDescriptor.class);
+        featuresTypes.add(GrayscaleHistogramDescriptor.class);
+        featuresTypes.add(PixelHistogramDescriptor.class);
+        return featuresTypes;
 	}	
 	
 	@Override
@@ -155,4 +162,9 @@ public class ChiSquaredMeasure implements Measure {
 	public Class<ChiSquaredMeasure> getType() {
 		return ChiSquaredMeasure.class;
 	}
+
+    @Override
+    public String getCategory() {
+        return "Squared L2 family or Chi squared family";
+    }
 }
