@@ -38,7 +38,6 @@ public class PixelHistogramExtractor implements Extractor, HasCategory {
     public Descriptor extract(Adapter adapter) throws Exception {
         if (adapter instanceof HasRGBPixels) {
             HasRGBPixels hasPixels = (HasRGBPixels) adapter;
-            double[][][] pixels = hasPixels.getRGBPixels();
             int bitsPerPixel = hasPixels.getBitsPerPixel();
 
             if (bitsPerPixel >= 32) {
@@ -49,21 +48,30 @@ public class PixelHistogramExtractor implements Extractor, HasCategory {
 
             PixelHistogramDescriptor histogram = new PixelHistogramDescriptor(
                     16, 1 << bitsPerPixel);
-
-            for (int x = 0; x < pixels.length; x++) {
-                for (int y = 0; y < pixels[0].length; y++) {
-                    int length = pixels[x][y].length;
-                    if (length == 1) {
-                        int rgb = (int) pixels[x][y][0];
+            int numBands = hasPixels.getNumBands();
+            int width = hasPixels.getWidth();
+            int height = hasPixels.getHeight();
+            if (numBands == 1) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        int rgb = (int) hasPixels.getRGBPixel(y, x, 0);
                         histogram.add(rgb, rgb, rgb);
-                    } else if (length == 2) {
-                        int r = (int) pixels[x][y][0];
-                        int gb = (int) pixels[x][y][1];
+                    }
+                }
+            } else if (numBands == 2) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        int r = (int) hasPixels.getRGBPixel(y, x, 0);
+                        int gb = (int) hasPixels.getRGBPixel(y, x, 1);
                         histogram.add(r, gb, gb);
-                    } else if (length >= 3) {
-                        int r = (int) pixels[x][y][0];
-                        int g = (int) pixels[x][y][1];
-                        int b = (int) pixels[x][y][2];
+                    }
+                }
+            } else if (numBands == 3) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        int r = (int) hasPixels.getRGBPixel(y, x, 0);
+                        int g = (int) hasPixels.getRGBPixel(y, x, 1);
+                        int b = (int) hasPixels.getRGBPixel(y, x, 2);
                         histogram.add(r, g, b);
                     }
                 }

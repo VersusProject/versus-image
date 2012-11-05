@@ -70,9 +70,6 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
         int width = raster.getWidth();
         int height = raster.getHeight();
 
-//		log.trace("Height: " + height + ", Width: " + width + ", Bands: "
-//				+ numBands);
-
         double[][][] pixels = new double[height][width][numBands];
 
         for (int band = 0; band < numBands; band++) {
@@ -118,10 +115,25 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
         WritableRaster raster = image.getRaster();
         return raster.getSampleDouble(column, row, band);
     }
+    
+    @Override
+    public int getWidth() {
+        return image.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return image.getHeight();
+    }
 
     @Override
     public int getBitsPerPixel() {
         return image.getColorModel().getPixelSize();
+    }
+    
+    @Override
+    public int getNumBands() {
+        return image.getRaster().getNumBands();
     }
 
     @Override

@@ -144,6 +144,21 @@ public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader, 
     }
 
     @Override
+    public int getWidth() {
+        return imageObject.getNumCols();
+    }
+
+    @Override
+    public int getHeight() {
+        return imageObject.getNumRows();
+    }
+    
+    @Override
+    public int getNumBands() {
+        return imageObject.getNumBands();
+    }
+    
+    @Override
     public String getName() {
         return "Image Object";
     }

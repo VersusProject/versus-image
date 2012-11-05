@@ -40,26 +40,27 @@ public class RGBHistogramExtractor implements Extractor, HasCategory {
         if (adapter instanceof HasRGBPixels) {
 
             HasRGBPixels hasPixels = (HasRGBPixels) adapter;
-            double[][][] pixels = hasPixels.getRGBPixels();
-            RGBHistogramDescriptor histogram_rgb = new RGBHistogramDescriptor();
+            if (hasPixels.getNumBands() != 3) {
+                throw new UnsupportedTypeException(
+                        "Expected a color image. Input image is grayscale.");
+            }
 
-            for (int x = 0; x < pixels.length; x++) {
-                for (int y = 0; y < pixels[0].length; y++) {
+            RGBHistogramDescriptor rgbHistogram = new RGBHistogramDescriptor();
 
-                    int r, g, b;
-                    if (pixels[x][y].length == 3) {
-                        r = (int) pixels[x][y][0];
-                        g = (int) pixels[x][y][1];
-                        b = (int) pixels[x][y][2];
-                        histogram_rgb.add(r, "red");
-                        histogram_rgb.add(g, "green");
-                        histogram_rgb.add(b, "blue");
-                    } else {
-                        throw new UnsupportedTypeException("Expected a color image. Input image is grayscale.");
-                    }
+            int width = hasPixels.getWidth();
+            int height = hasPixels.getHeight();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                        int r = (int) hasPixels.getRGBPixel(y, x, 0);
+                        int g = (int) hasPixels.getRGBPixel(y, x, 1);
+                        int b = (int) hasPixels.getRGBPixel(y, x, 2);
+                        rgbHistogram.add(r, "red");
+                        rgbHistogram.add(g, "green");
+                        rgbHistogram.add(b, "blue");
                 }
             }
-            return histogram_rgb;
+
+            return rgbHistogram;
         } else {
             throw new UnsupportedTypeException();
         }
