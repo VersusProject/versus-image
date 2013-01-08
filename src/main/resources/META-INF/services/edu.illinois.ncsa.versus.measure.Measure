@@ -11,3 +11,4 @@ edu.illinois.ncsa.versus.measure.impl.RuzickaSimilarityMeasure
 edu.illinois.ncsa.versus.measure.impl.SSDMeasure
 edu.illinois.ncsa.versus.measure.impl.TanimotoDistanceMeasure
 edu.illinois.ncsa.versus.measure.impl.WaveHedgesDistanceMeasure
+edu.illinois.ncsa.versus.measure.impl.DifferenceMeasure
