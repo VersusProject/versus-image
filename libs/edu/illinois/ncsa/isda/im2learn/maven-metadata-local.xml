@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>edu.illinois.ncsa.isda</groupId>
+  <artifactId>im2learn</artifactId>
+  <versioning>
+    <versions>
+      <version>2.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20130214192316</lastUpdated>
+  </versioning>
+</metadata>
