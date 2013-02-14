@@ -41,8 +41,11 @@ public class GrayscaleHistogramExtractor implements Extractor, HasCategory {
         if (adapter instanceof HasRGBPixels) {
 
             HasRGBPixels hasPixels = (HasRGBPixels) adapter;
+            if (hasPixels.getNumBands() != 1) {
+                throw new UnsupportedTypeException(
+                        "Expected a grayscale image. Input image is otherwise.");
+            }
 
-            double[][][] pixels = hasPixels.getRGBPixels();
             int bitsPerPixel = hasPixels.getBitsPerPixel();
             if (bitsPerPixel >= 32) {
                 throw new UnsupportedOperationException(
@@ -51,19 +54,14 @@ public class GrayscaleHistogramExtractor implements Extractor, HasCategory {
             }
 
             int numBins = 1 << bitsPerPixel;
-
             GrayscaleHistogramDescriptor histogram = new GrayscaleHistogramDescriptor(numBins);
 
-            for (int x = 0; x < pixels.length; x++) {
-                for (int y = 0; y < pixels[0].length; y++) {
-
-                    int r;
-                    if (pixels[x][y].length == 1) {
-                        r = (int) pixels[x][y][0];
-                        histogram.add(r);
-                    } else {
-                        throw new UnsupportedTypeException("Expected a grayscale image. Input image is otherwise.");
-                    }
+            int width = hasPixels.getWidth();
+            int height = hasPixels.getHeight();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int r = (int) hasPixels.getRGBPixel(y, x, 0);
+                    histogram.add(r);
                 }
             }
             return histogram;
