@@ -3,6 +3,8 @@
  */
 package edu.illinois.ncsa.versus.descriptor.impl;
 
+import java.io.Serializable;
+
 //import edu.illinois.ncsa.versus.UnsupportedTypeException;
 import edu.illinois.ncsa.versus.descriptor.Feature;
 
@@ -12,7 +14,7 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
  * @author Devin Bonnie
  * 
  */
-public class RGBHistogramDescriptor implements Feature {
+public class RGBHistogramDescriptor implements Serializable,Feature {
 
 	private final int[][] rgbHistogram;	
 
