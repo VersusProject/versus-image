@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import edu.illinois.ncsa.versus.adapter.HasPixels;
  * @author Luigi Marini
  * 
  */
-public class BufferedImageAdapter implements HasPixels, FileLoader {
+public class BufferedImageAdapter implements Serializable,HasPixels, FileLoader {
 
 	/** Buffered image **/
 	private BufferedImage image;
