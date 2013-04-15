@@ -5,6 +5,7 @@ package edu.illinois.ncsa.versus.extract.impl;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ import edu.illinois.ncsa.versus.extract.Extractor;
  * 
  * 
  */
-public class RGBHistogramExtractor implements Extractor {
+public class RGBHistogramExtractor implements Serializable,Extractor {
 
 	@Override
 	public BufferedImageAdapter newAdapter() {
