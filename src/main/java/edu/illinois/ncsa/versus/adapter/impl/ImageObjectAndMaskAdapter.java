@@ -63,6 +63,7 @@ public class ImageObjectAndMaskAdapter extends ImageObjectAdapter
         return mask;
     }
     
+    
     @Override
     public double[][] getMask() {
         int numRows = mask.getNumRows();

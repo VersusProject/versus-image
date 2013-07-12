@@ -33,6 +33,10 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
      * Buffered image *
      */
     private BufferedImage image;
+    private boolean minCalculated = false;
+    private boolean maxCalculated = false;
+    private double min = Double.MAX_VALUE;
+    private double max = Double.MIN_NORMAL;
 
     /**
      * Commons logging *
@@ -78,8 +82,12 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
                     // TODO make sure that getSampleDouble() is the used
                     // correctly
                     try {
-                        pixels[row][col][band] = raster.getSampleDouble(col,
-                                row, band);
+                    	double pix = raster.getSampleDouble(col, row, band);
+                    	if (pix < min)
+                    		min = pix;
+                    	if (pix > max)
+                    		max = pix;
+                        pixels[row][col][band] = pix;
                     } catch (ArrayIndexOutOfBoundsException e) {
                         log.error("Error getting pixels [" + row + ", " + width
                                 + ", " + band + "]" + e);
@@ -87,6 +95,7 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
                 }
             }
         }
+        setMaxMinCalculated();
         return pixels;
     }
 
@@ -96,6 +105,7 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
         if (image == null) {
             throw new UnsupportedTypeException("No image reader can decode this file.");
         }
+        setMaxMinUncalculated();
     }
 
     @Override
@@ -107,6 +117,7 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
             }
         } finally {
             stream.close();
+            setMaxMinUncalculated();
         }
     }
 
@@ -142,18 +153,6 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
     }
 
     @Override
-    public double getHSVPixel(int row, int column, int band) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double[][][] getHSVPixels() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<String> getSupportedMediaTypes() {
         List<String> mediaTypes = new ArrayList<String>();
         mediaTypes.add("image/*");
@@ -164,4 +163,41 @@ public class BufferedImageAdapter implements HasPixels, FileLoader, StreamLoader
     public String getCategory() {
         return "2D";
     }
+
+    private void setMaxMinUncalculated(){
+    	minCalculated = false;
+    	maxCalculated = false;
+    }
+
+    private void setMaxMinCalculated(){
+    	minCalculated = true;
+    	maxCalculated = true;
+    }
+	@Override
+	public double getMinimumPixel() {
+		if (!minCalculated) {
+			double pixels[][][] = getRGBPixels();
+			for (int i = 0; i < pixels.length; i++)
+				for (int j = 0; j < pixels[0].length; j++)
+					for (int k = 0; k < pixels[0][0].length; k++) 
+						if (pixels[i][j][k] < min)
+							min = pixels[i][j][k];
+			minCalculated = true;
+		}
+		return min;
+	}
+
+	@Override
+	public double getMaximumPixel() {
+		if (!maxCalculated) {
+			double pixels[][][] = getRGBPixels();
+			for (int i = 0; i < pixels.length; i++)
+				for (int j = 0; j < pixels[0].length; j++)
+					for (int k = 0; k < pixels[0][0].length; k++) 
+						if (pixels[i][j][k] > max)
+							max = pixels[i][j][k];
+			maxCalculated = true;
+		}
+		return max;
+	}
 }

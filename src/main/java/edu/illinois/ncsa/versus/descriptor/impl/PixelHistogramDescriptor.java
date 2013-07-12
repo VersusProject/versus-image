@@ -17,23 +17,18 @@ public class PixelHistogramDescriptor implements Feature {
 
 	private final int[][][] histogram;
 	
-    private final int intervalSize;
     
 	public PixelHistogramDescriptor() {
-		this(16, 256);
+		this(256);
 	}
 
-	public PixelHistogramDescriptor(int numBins, int maxPixelValue) {
+	public PixelHistogramDescriptor(int numBins) {
 		this.numBins   = numBins;
 		this.histogram = new int[numBins][numBins][numBins];
-		this.intervalSize = maxPixelValue / numBins;		
 	}
 
 	public void add(int r, int g, int b) {
-		int x = r / intervalSize;
-		int y = g / intervalSize;
-		int z = b / intervalSize;
-		histogram[x][y][z]++;
+		histogram[r][g][b]++;
 	}
 
 	@Override

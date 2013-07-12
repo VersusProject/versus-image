@@ -47,7 +47,7 @@ public class GrayscaleHistogramExtractor implements Extractor, HasCategory {
             }
 
             int bitsPerPixel = hasPixels.getBitsPerPixel();
-            if (bitsPerPixel >= 32) {
+            if (bitsPerPixel > 8 ) {
                 throw new UnsupportedOperationException(
                         "The color depth of the image (" + bitsPerPixel
                         + " bits per pixel) is too big.");

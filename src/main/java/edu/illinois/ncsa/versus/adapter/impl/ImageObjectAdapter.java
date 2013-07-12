@@ -3,6 +3,8 @@
  */
 package edu.illinois.ncsa.versus.adapter.impl;
 
+import ij.IJ;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import edu.illinois.ncsa.versus.adapter.StreamLoader;
 import edu.illinois.ncsa.versus.utility.HasCategory;
 import ncsa.im2learn.core.datatype.ImageObject;
 import ncsa.im2learn.core.io.ImageLoader;
+import ncsa.im2learn.core.io.tiff.TIFFLoader;
 
 /**
  * Simple adapter encapsulating Im2Learn ImageObject.
@@ -81,6 +84,16 @@ public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader, 
         }
         return pixels;
     }
+    
+	/**
+	 * Saves the image with the name and at the path given by the passed string. 
+	 * @param completePath the complete and absolute path desired path including 
+	 * the name and type of the file. 
+	 */
+	TIFFLoader readerwriter = new TIFFLoader();
+	public void saveImage(String completePath) throws IOException {
+		readerwriter.writeImage(completePath, imageObject);
+	}
 
     @Override
     public int getBitsPerPixel() {
@@ -159,20 +172,19 @@ public class ImageObjectAdapter implements HasPixels, FileLoader, StreamLoader, 
     }
     
     @Override
+    public double getMinimumPixel() {
+    	return imageObject.getMin();
+    }
+    
+    @Override
+    public double getMaximumPixel() {
+    	return imageObject.getMax();
+    }
+    
+    
+    @Override
     public String getName() {
         return "Image Object";
-    }
-
-    @Override
-    public double getHSVPixel(int row, int column, int band) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double[][][] getHSVPixels() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

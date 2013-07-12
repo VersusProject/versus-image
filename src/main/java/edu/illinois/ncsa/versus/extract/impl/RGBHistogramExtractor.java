@@ -44,6 +44,13 @@ public class RGBHistogramExtractor implements Extractor, HasCategory {
                 throw new UnsupportedTypeException(
                         "Expected a color image. Input image is grayscale.");
             }
+            
+            int bitsPerPixel = hasPixels.getBitsPerPixel();
+            if ( bitsPerPixel > 24 ) {
+                throw new UnsupportedOperationException(
+                        "The color depth of the image (" + bitsPerPixel
+                        + " bits per pixel) is too big.");
+            }
 
             RGBHistogramDescriptor rgbHistogram = new RGBHistogramDescriptor();
 
