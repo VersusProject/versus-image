@@ -45,10 +45,8 @@ public class HistogramDistanceMeasure implements Measure, HasCategory {
         double sum = 0;
 
         for (int x = 0; x < feature1.getNumBins(); x++) {
-            for (int y = 0; y < feature1.getNumBins(); y++) {
-                for (int z = 0; z < feature1.getNumBins(); z++) {
-                    sum += Math.pow(feature1.get(x, y, z) - feature2.get(x, y, z), 2);
-                }
+            for (int y = 0; y < feature1.getNumBands(); y++) {
+                    sum += Math.pow(feature1.get(x, y) - feature2.get(x, y), 2);
             }
         }
 

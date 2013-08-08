@@ -14,21 +14,23 @@ import edu.illinois.ncsa.versus.descriptor.Feature;
 public class PixelHistogramDescriptor implements Feature {
 
 	private final int numBins;
+	private final int numBands;
 
-	private final int[][][] histogram;
+	private final int[][] histogram;
 	
     
 	public PixelHistogramDescriptor() {
-		this(256);
+		this(256, 3);
 	}
 
-	public PixelHistogramDescriptor(int numBins) {
+	public PixelHistogramDescriptor(int numBins, int numBands) {
 		this.numBins   = numBins;
-		this.histogram = new int[numBins][numBins][numBins];
+		this.numBands = numBands;
+		this.histogram = new int[numBins][numBands];
 	}
 
-	public void add(int r, int g, int b) {
-		histogram[r][g][b]++;
+	public void add(int bin, int band) {
+		histogram[bin][band]++;
 	}
 
 	@Override
@@ -44,11 +46,18 @@ public class PixelHistogramDescriptor implements Feature {
 	}
 
 	/**
+	 * @return the numBands
+	 */
+	public int getNumBands() {
+		return numBands;
+	}
+
+	/**
 	 * Return the histogram in case the measures need to modify it. 
 	 * 
 	 * @return The pixel histogram. 
 	 */
-	public int[][][] getHistogram(){
+	public int[][] getHistogram(){
 		return histogram; 
 	}
 	
@@ -62,11 +71,10 @@ public class PixelHistogramDescriptor implements Feature {
 	public String toString() {
 		String s = "Showing contents of " + getName() + "\n";
 		for (int x = 0; x < numBins; x++) {
-			for (int y = 0; y < numBins; y++) {
-				for (int z = 0; z < numBins; z++) {
-					if (histogram[x][y][z] != 0) {
-						s += ("[" + x + ", " + y + ", " + z + "] = "
-								+ histogram[x][y][z] + "\n");
+			for (int y = 0; y < numBands; y++) {{
+					if (histogram[x][y] != 0) {
+						s += ("[" + x + ", " + y + "] = "
+								+ histogram[x][y] + "\n");
 					}
 				}
 			}
@@ -74,7 +82,7 @@ public class PixelHistogramDescriptor implements Feature {
 		return s;
 	}
 
-	public int get(int x, int y, int z) {
-		return histogram[x][y][z];
+	public int get(int bin, int band) {
+		return histogram[bin][band];
 	}
 }

@@ -106,16 +106,14 @@ public class ChiSquaredMeasure implements Measure, HasCategory {
 		double X2 = 0;
 		
 		for( int i=0; i < feature1.getNumBins(); i++ ){			
-			for( int j=0; j < feature1.getNumBins(); j++ ){				
-				for( int k=0; k < feature1.getNumBins(); k++ ){
+			for( int j=0; j < feature1.getNumBands(); j++ ){			
 					
-					double Mi = ( feature1.get(i,j,k) + feature2.get(i,j,k) ) / 2.0;
+					double Mi = ( feature1.get(i,j) + feature2.get(i,j) ) / 2.0;
 					
 					//Neyman's Chi-Squared ignores zero bins
 					if( Mi != 0 ){
-						X2 +=  Math.pow( feature1.get(i,j,k) - Mi, 2 ) / Mi;
+						X2 +=  Math.pow( feature1.get(i,j) - Mi, 2 ) / Mi;
 					}					
-				}
 			}
 		}	
 		return new SimilarityNumber(X2); 

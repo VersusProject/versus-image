@@ -41,51 +41,32 @@ public class PixelHistogramExtractor implements Extractor, HasCategory {
 		if (adapter instanceof HasRGBPixels) {
 			HasRGBPixels hasPixels = (HasRGBPixels) adapter;
 
-			PixelHistogramDescriptor histogram = new PixelHistogramDescriptor(
-					NUM_BINS);
 			int numBands = hasPixels.getNumBands();
+			PixelHistogramDescriptor histogram = new PixelHistogramDescriptor(
+					NUM_BINS, numBands);
 			int width = hasPixels.getWidth();
 			int height = hasPixels.getHeight();
-			double scale = hasPixels.getMaximumPixel()
-					- hasPixels.getMinimumPixel();
+			double scale = (hasPixels.getMaximumPixel()
+					- hasPixels.getMinimumPixel())*(1/255.0); 
 
 			if (scale > 0) {
-				if (numBands == 1) {
-					for (int x = 0; x < width; x++) {
-						for (int y = 0; y < height; y++) {
-							int rgb = (int) Math.round((hasPixels.getRGBPixel(
-									y, x, 0) - hasPixels.getMinimumPixel())
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						for (int band = 0; band < numBands; band++) {
+							int bin = (int)  Math.round((hasPixels.getRGBPixel(y, x, band) - hasPixels.getMinimumPixel())
 									/ scale);
-							histogram.add(rgb, rgb, rgb);
-						}
-					}
-				} else if (numBands == 2) {
-					for (int x = 0; x < width; x++) {
-						for (int y = 0; y < height; y++) {
-							int r = (int)  Math.round((hasPixels.getRGBPixel(y, x, 0) - hasPixels.getMinimumPixel())
-									/ scale);
-							int gb = (int)  Math.round((hasPixels.getRGBPixel(y, x, 1) - hasPixels.getMinimumPixel())
-									/ scale);
-							histogram.add(r, gb, gb);
-						}
-					}
-				} else if (numBands == 3) {
-					for (int x = 0; x < width; x++) {
-						for (int y = 0; y < height; y++) {
-							int r = (int)  Math.round((hasPixels.getRGBPixel(y, x, 0) - hasPixels.getMinimumPixel())
-									/ scale);
-							int g = (int)  Math.round((hasPixels.getRGBPixel(y, x, 1) - hasPixels.getMinimumPixel())
-									/ scale);
-							int b = (int)  Math.round((hasPixels.getRGBPixel(y, x, 2) - hasPixels.getMinimumPixel())
-									/ scale);
-							histogram.add(r, g, b);
+							if (bin < 0 || bin > NUM_BINS)
+								continue;
+							histogram.add(bin, band);
 						}
 					}
 				}
 			} else {
 				for (int x = 0; x < width; x++) {
 					for (int y = 0; y < height; y++) {
-						histogram.add(0, 0, 0);
+						for (int band = 0; band < numBands; band++) {
+						histogram.add(0, band);
+						}
 					}
 				}
 			}
