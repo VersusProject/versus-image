@@ -12,16 +12,6 @@ import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 public class BufferedImageAdapterTest {
 
     @Test
-    public void testBufferedImageAdapterBufferedImage() {
-        System.err.println("Not yet implemented");
-    }
-
-    @Test
-    public void testGetImage() {
-        System.err.println("Not yet implemented");
-    }
-
-    @Test
     public void testGetPixels() {
 
         BufferedImageAdapter adapter = new BufferedImageAdapter();

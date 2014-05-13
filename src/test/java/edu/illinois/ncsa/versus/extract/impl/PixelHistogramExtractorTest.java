@@ -91,8 +91,8 @@ public class PixelHistogramExtractorTest {
     public void testExtractGrayscale32BitTif() throws Exception {
         try {
             extract("data/grayscale32bit.tif");
-            assertFalse("Should have thrown a UnsupportedOperationException", true);
-        } catch (UnsupportedOperationException e) {
+            assertFalse("Should have thrown a ArrayIndexOutOfBoundsException", true);
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(e);
         }
     }
