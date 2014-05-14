@@ -22,8 +22,8 @@ import org.junit.Test;
 
 import edu.illinois.ncsa.versus.adapter.impl.BufferedImageAdapter;
 import edu.illinois.ncsa.versus.adapter.impl.ImageObjectAdapter;
-import edu.illinois.ncsa.versus.descriptor.Descriptor;
 import edu.illinois.ncsa.versus.descriptor.impl.GrayscaleHistogramDescriptor;
+import org.junit.Ignore;
 
 /**
  *
@@ -75,9 +75,10 @@ public class GrayscaleHistogramExtractorTest {
         extract("data/grayscale8bit.tif");
     }
 
+    @Ignore("16bpp not supported yet.")
     @Test
     public void testExtract16BitTif() throws Exception {
-//        extract("data/grayscale16bit.tif");
+        extract("data/grayscale16bit.tif");
     }
 
     @Test
@@ -90,6 +91,7 @@ public class GrayscaleHistogramExtractorTest {
         }
     }
 
+    @Ignore("No loader for grayscale jpg on linux.")
     @Test
     public void testExtract8BitJpg() throws Exception {
         extract("data/grayscale8bit.jpg");
@@ -100,8 +102,9 @@ public class GrayscaleHistogramExtractorTest {
         extract("data/grayscale8bit.png");
     }
 
+    @Ignore("16bpp not supported yet.")
     @Test
     public void testExtract16BitPng() throws Exception {
-//        extract("data/grayscale16bit.png");
+        extract("data/grayscale16bit.png");
     }
 }

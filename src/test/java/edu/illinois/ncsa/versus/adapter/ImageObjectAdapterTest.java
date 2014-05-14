@@ -1,12 +1,12 @@
 package edu.illinois.ncsa.versus.adapter;
 
+import edu.illinois.ncsa.versus.adapter.impl.ImageObjectAdapter;
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import edu.illinois.ncsa.versus.adapter.impl.ImageObjectAdapter;
 
 public class ImageObjectAdapterTest {
 
@@ -56,6 +56,7 @@ public class ImageObjectAdapterTest {
         loadImage("data/color24bit.png", 24);
     }
 
+    @Ignore("No loader for grayscale jpg on linux.")
     @Test
     public void testLoadGrayscale8BitJpg() throws IOException {
         loadImage("data/grayscale8bit.jpg", 8);
